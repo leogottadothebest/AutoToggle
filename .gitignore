@@ -1,0 +1,33 @@
+# AutoToggle - macOS 26.0+
+# Xcode build artifacts
+*.mode1v3
+*.mode2v3
+*.pbxuser
+*.perspectivev3
+*.xcuserdata
+*.xccheckout
+*.xcworkspace
+xcuserdata/
+DerivedData/
+build/
+*.xcarchive
+*.app
+*.dmg
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# Misc
+.DS_Store
+*.swp
+*~.nib
+
+# Claude Code（本机特定配置，不入库）
+.claude/settings.local.json
