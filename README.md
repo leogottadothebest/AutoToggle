@@ -1,128 +1,131 @@
 # AutoToggle
 
-> macOS 应用自动开关管家 — 隐私优先、规则驱动
+> Privacy-first, rule-driven app launcher & terminator for macOS
+
+[English](README.md) · [中文](README.zh-CN.md)
 
 [![Platform](https://img.shields.io/badge/platform-macOS%2026.0%2B-blue)](https://developer.apple.com/macos/)
 [![Architecture](https://img.shields.io/badge/arch-Apple%20Silicon%20only-orange)](#)
 [![Swift](https://img.shields.io/badge/swift-6.0-orange)](https://swift.org)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-AutoToggle 是一款轻量级 macOS 菜单栏应用，通过自定义规则**自动启动**和**自动退出**你的应用程序。它支持按时间计划和闲置检测两种触发方式，所有数据仅存储在本地，无需联网。
+AutoToggle is a lightweight macOS menu bar app that **automatically launches** and **automatically quits** your applications based on custom rules. It supports both time-based schedules and idle detection, and all data is stored locally — no network required.
 
-## ✨ 功能
+## ✨ Features
 
-- **🕐 定时规则** — 按具体时间和星期自动启动或退出应用
-- **💤 闲置检测** — 应用闲置指定分钟后自动退出或隐藏
-- **🛡️ 假闲置检测** — 智能识别音频播放、会议等场景，避免误关
-- **📋 菜单栏图标 + 主窗口** — 菜单栏图标作为常驻快速入口，主窗口集中管理规则与日志
-- **🔌 开机自启** — 登录时自动启动，无需手动操作
-- **🔒 隐私优先** — 所有数据存储在本地，无网络请求，无数据上传
-- **🇨🇳 中文原生** — 全中文界面，对微信/钉钉/飞书等国内应用优化
+- **🕐 Scheduled rules** — automatically launch or quit apps at specific times and weekdays
+- **💤 Idle detection** — auto-quit or hide apps after they have been idle for a set duration
+- **🛡️ Fake-idle detection** — intelligently recognizes audio playback, meetings, and similar scenarios to avoid false quits
+- **📋 Menu bar icon + main window** — the menu bar icon is an always-on quick entry, while the main window manages rules and logs
+- **🔌 Launch at login** — start automatically on sign-in, no manual steps
+- **🔒 Privacy-first** — all data is stored locally, with no network requests and no data upload
+- **🇨🇳 Native Chinese** — full Chinese UI, optimized for WeChat / DingTalk / Feishu and other domestic apps
 
-## 📥 安装
+## 📥 Installation
 
-### 从 GitHub Release 下载
+### Download from GitHub Release
 
-1. 前往 [Releases](https://github.com/leogottadothebest/AutoToggle/releases) 页面
-2. 下载最新的 `AutoToggle.dmg` 文件
-3. 打开 DMG，将 AutoToggle 拖入「应用程序」文件夹
-4. 首次启动时，右键点击 AutoToggle.app →「打开」以绕过 Gatekeeper
-5. 根据引导授予「辅助功能」权限（可选，用于更精确的闲置检测）
+1. Go to the [Releases](https://github.com/leogottadothebest/AutoToggle/releases) page
+2. Download the latest `.dmg` file (e.g. `AutoToggle-1.0.0.dmg`)
+3. Open the DMG and drag AutoToggle into the Applications folder
+4. On first launch, right-click AutoToggle.app → **Open** to bypass Gatekeeper
+5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection)
 
-### 从源码构建
+### Build from source
 
 ```bash
-# 克隆仓库
+# Clone the repository
 git clone https://github.com/leogottadothebest/AutoToggle.git
 cd AutoToggle
 
-# 安装依赖（需要 XcodeGen）
+# Install dependencies (XcodeGen required)
 brew install xcodegen
 
-# 生成 Xcode 项目
+# Generate the Xcode project
 xcodegen generate
 
-# 构建
+# Build
 xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Release build
 
-# 成品在 DerivedData 目录中
+# The app is in the DerivedData directory
 ```
 
-**要求**: Xcode 26.0+, macOS 26.0+
+**Requirements**: Xcode 26.0+, macOS 26.0+
 
-## 🎯 使用指南
+## 🎯 Usage
 
-### 创建定时规则
+### Create a scheduled rule
 
-1. 点击菜单栏图标 → **设置** → **规则** 选项卡
-2. 点击 **添加规则**
-3. 搜索并选择目标应用
-4. 选择 **定时启动** 或 **定时退出**
-5. 设置触发时间（时:分）和日期（每天/工作日/周末/自定义）
-6. 点击 **保存**
+1. Click the menu bar icon → **Settings** → **Rules** tab
+2. Click **Add Rule**
+3. Search for and select the target app
+4. Choose **Scheduled Launch** or **Scheduled Quit**
+5. Set the trigger time (HH:mm) and the days (daily / weekdays / weekends / custom)
+6. Click **Save**
 
-### 创建闲置规则
+### Create an idle rule
 
-1. 同上进入规则编辑
-2. 选择 **闲置退出** 或 **闲置隐藏**
-3. 设置闲置时长（1分钟 ~ 2小时）
-4. 点击 **保存**
+1. Enter rule editing as above
+2. Choose **Idle Quit** or **Idle Hide**
+3. Set the idle duration (1 minute to 2 hours)
+4. Click **Save**
 
-> 💡 **提示**: 正在播放音乐、视频会议的应用程序不会被自动关闭。
+> 💡 **Tip**: Apps that are playing music or in a video call will not be closed automatically.
 
-### 管理规则
+### Manage rules
 
-- **启用/禁用**: 在规则列表中直接切换开关
-- **编辑**: 双击规则行
-- **删除**: 在规则行上向左滑动 ∨ 进入编辑界面后点击删除
+- **Enable / Disable**: toggle the switch directly in the rule list
+- **Edit**: double-click a rule row
+- **Delete**: swipe left on a rule row, or delete from the edit screen
 
-## 🏗️ 技术架构
+## 🏗️ Architecture
 
 ```
 AutoToggle/
-├── AutoToggleApp.swift         # @main 入口（App 场景 + MenuBarExtra）
-├── AppDelegate.swift           # 原生 NSWindow + NSHostingView 主窗口
-├── AppDependencies.swift       # @MainActor 集中依赖注入
+├── AutoToggleApp.swift         # @main entry (App scene + MenuBarExtra)
+├── AppDelegate.swift           # native NSWindow + NSHostingView main window
+├── AppDependencies.swift       # @MainActor centralized dependency injection
 ├── Info.plist / AutoToggle.entitlements
-├── Managers/                   # 业务逻辑（@MainActor）
+├── Managers/                   # business logic (@MainActor)
 │   ├── RuleManager             # SwiftData CRUD
-│   ├── ScheduleManager         # 定时调度引擎
-│   ├── AppMonitorManager       # NSWorkspace 生命周期监控
-│   ├── IdleDetectorManager     # 闲置检测 + 假闲置判断
-│   ├── AppActionManager        # 应用启停（三级优雅降级）
-│   ├── MenuBarManager          # 菜单栏状态管理
-│   ├── LogManager              # 日志 + 保留策略
-│   ├── ProfileManager          # 规则导入/导出
-│   ├── PermissionManager       # 权限检查
-│   ├── AppearanceManager       # 外观/配色
+│   ├── ScheduleManager         # scheduling engine
+│   ├── AppMonitorManager       # NSWorkspace lifecycle monitoring
+│   ├── IdleDetectorManager     # idle detection + fake-idle detection
+│   ├── AppActionManager        # app launch/quit (three-tier graceful fallback)
+│   ├── MenuBarManager          # menu bar state management
+│   ├── LogManager              # logging + retention policy
+│   ├── ProfileManager          # rule import / export
+│   ├── PermissionManager       # permission checks
+│   ├── AppearanceManager       # appearance / theming
+│   ├── SleepPreventionManager  # sleep-prevention assertions during scheduled actions
 │   └── FocusedAppProvider / IdleDecisionEngine / SystemIdleProvider
-├── Models/                     # SwiftData（AppRule / LogEntry / Profile / AppInfo / TimeTrigger）
+├── Models/                     # SwiftData (AppRule / LogEntry / Profile / AppInfo / TimeTrigger)
 ├── Views/
-│   ├── MainWindow/             # 主窗口（Overview / App / Settings / Logs）
-│   ├── MenuBar/                # 菜单栏面板
-│   ├── Settings/               # 规则编辑组件
-│   └── Onboarding/             # 权限引导
-├── Utilities/                  # 工具类（BundleHelper / AppIconProvider）
+│   ├── MainWindow/             # main window (Overview / App / Settings / Logs)
+│   ├── MenuBar/                # menu bar panel
+│   ├── Settings/               # rule editing components
+│   └── Onboarding/             # permission onboarding
+├── Utilities/                  # helpers (BundleHelper / AppIconProvider)
 └── Resources/                  # Assets.xcassets / Localizable.xcstrings
 ```
 
-### 应用退出降级策略
+### App quit fallback strategy
 
 ```
-1️⃣  AppleScript quit → 最优雅（保存数据）
-2️⃣  NSRunningApplication.terminate() → 标准退出
-3️⃣  forceTerminate() → 最后手段（按 bundleID 重查 PID，避免 PID 复用误杀）
+1️⃣  AppleScript quit → most graceful (saves data)
+2️⃣  NSRunningApplication.terminate() → standard quit
+3️⃣  forceTerminate() → last resort (re-resolves PID by bundle ID to avoid killing a recycled PID)
 ```
 
-## 📋 待实现功能
+## 📋 Roadmap
 
-- [ ] WiFi/蓝牙/电源条件触发
-- [ ] 场景模式（一键切换工作/生活应用布局）
-- [ ] Shortcuts 集成
-- [ ] 应用使用统计
-- [ ] 规则模板市场
+- [ ] WiFi / Bluetooth / power-state triggers
+- [ ] Scene mode (one-click switch between work/life app layouts)
+- [ ] Shortcuts integration
+- [ ] App usage statistics
+- [ ] Rule template marketplace
 
-## 📄 许可
+## 📄 License
 
 MIT License © 2026 leogottadothebest
 
