@@ -113,10 +113,11 @@ final class IdleDetectorManager {
         if let focusedAppProvider { self.focusedAppProvider = focusedAppProvider }
     }
 
-    /// 标记应用为活跃（在应用切换时调用）
+    /// 标记应用为活跃（在应用切换或应用启动时调用），重置其闲置基线。
+    /// 应用启动（含定时/后台启动）时若不重置，陈旧的活跃时间会让闲置规则立即误触发。
     func markAppActive(_ bundleID: String) {
         appLastActiveTime[bundleID] = Date()
-        // 应用被重新激活，清除该应用所有规则的触发记录，进入新的活跃周期
+        // 应用被重新激活/启动，清除该应用所有规则的触发记录，进入新的活跃周期
         lastTriggered = lastTriggered.filter { $0.key.bundleID != bundleID }
     }
 

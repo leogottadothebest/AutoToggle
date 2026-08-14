@@ -28,6 +28,9 @@ struct SettingsTab: View {
     /// 防睡眠管理器
     @Environment(SleepPreventionManager.self) private var sleepPreventionManager
 
+    /// 权限管理器
+    @Environment(PermissionManager.self) private var permissionManager
+
     /// 日志保留 - 活动日志
     @AppStorage("activityLogRetentionDays") private var activityLogRetentionDays: Int = 30
     @AppStorage("activityMaxEntries") private var activityMaxEntries: Int = 500
@@ -52,6 +55,53 @@ struct SettingsTab: View {
                 Text("启动")
             } footer: {
                 Text("AutoToggle 将在菜单栏安静运行，不占用 Dock 空间。")
+            }
+
+            // 辅助功能权限
+            Section {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("辅助功能权限")
+                        Text(permissionManager.accessibilityGranted ? "已授权" : "未授权")
+                            .font(.caption)
+                            .foregroundStyle(permissionManager.accessibilityGranted ? .green : .orange)
+                    }
+
+                    Spacer()
+
+                    if !permissionManager.accessibilityGranted {
+                        Button("请求授权") {
+                            _ = permissionManager.requestAccessibility()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
+                    }
+
+                    Button("打开系统设置") {
+                        permissionManager.openAccessibilitySettings()
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+
+                if permissionManager.needsRestartToApplyAccessibility {
+                    HStack {
+                        Label("若你已在系统设置中开启授权，重启应用后即可生效。",
+                              systemImage: "arrow.clockwise")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Button("立即重启") {
+                            permissionManager.restartToApplyAccessibility()
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                    }
+                }
+            } header: {
+                Text("权限")
+            } footer: {
+                Text("辅助功能权限用于实时跟踪应用焦点，提升闲置判定精度；未授权不影响核心功能。")
             }
 
             // 通知设置
@@ -242,7 +292,7 @@ struct SettingsTab: View {
                 HStack {
                     Text("版本")
                     Spacer()
-                    Text("1.0.0")
+                    Text(appVersion)
                         .foregroundStyle(.secondary)
                 }
 
@@ -259,7 +309,15 @@ struct SettingsTab: View {
         .formStyle(.grouped)
         .onAppear {
             checkLaunchAtLogin()
+            permissionManager.refresh()
         }
+    }
+
+    // MARK: - 版本
+
+    /// 应用版本号（读取 Info.plist 的 CFBundleShortVersionString，避免与工程定义脱节）
+    private var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.1.0"
     }
 
     // MARK: - 时区

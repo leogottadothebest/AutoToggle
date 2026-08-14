@@ -16,8 +16,10 @@ struct AppPickerOverlay: View {
     @State private var allApps: [AppInfo] = []
     /// 是否正在加载
     @State private var isLoading = true
+    /// 搜索框是否聚焦（打开时自动聚焦）
+    @FocusState private var isSearchFocused: Bool
 
-    /// 按首字母分组的应用
+    /// 按首字母分组的应用（分组与排序均遵循当前界面语言）
     private var groupedApps: [(letter: String, apps: [AppInfo])] {
         let filtered = searchText.isEmpty
             ? allApps
@@ -27,17 +29,12 @@ struct AppPickerOverlay: View {
             }
 
         let grouped = Dictionary(grouping: filtered) { app in
-            let firstChar = app.displayName.prefix(1).uppercased()
-            // 判断是否为英文字母
-            if firstChar.rangeOfCharacter(from: CharacterSet.uppercaseLetters) != nil {
-                return String(firstChar)
-            }
-            return "#"
+            AppSortHelper.indexLetter(for: app.displayName)
         }
 
         return grouped
-            .map { (letter: $0.key, apps: $0.value.sorted { $0.displayName.localizedStandardCompare($1.displayName) == .orderedAscending }) }
-            .sorted { $0.letter < $1.letter }
+            .map { (letter: $0.key, apps: AppSortHelper.sorted($0.value)) }
+            .sorted { AppSortHelper.isOrderedBefore($0.letter, $1.letter) }
     }
 
     /// 所有分组字母（用于快速索引）
@@ -66,6 +63,10 @@ struct AppPickerOverlay: View {
         }
         .onAppear {
             loadAllApps()
+            // 自动将光标置于搜索框，方便直接输入
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                isSearchFocused = true
+            }
         }
     }
 
@@ -82,6 +83,7 @@ struct AppPickerOverlay: View {
                 TextField(String(localized: "appPicker.search"), text: $searchText)
                     .textFieldStyle(.plain)
                     .font(.body)
+                    .focused($isSearchFocused)
 
                 if !searchText.isEmpty {
                     Button(action: { searchText = "" }) {
@@ -115,9 +117,9 @@ struct AppPickerOverlay: View {
     // MARK: - 应用列表
 
     private var appListView: some View {
-        HStack(spacing: 0) {
-            // 主列表
-            ScrollViewReader { proxy in
+        ScrollViewReader { proxy in
+            HStack(spacing: 0) {
+                // 主列表
                 List {
                     ForEach(groupedApps, id: \.letter) { group in
                         Section {
@@ -133,22 +135,35 @@ struct AppPickerOverlay: View {
                     }
                 }
                 .listStyle(.plain)
-            }
 
-            // 快速索引（仅未搜索时显示）
-            if searchText.isEmpty && allLetters.count > 3 {
-                VStack(spacing: 1) {
-                    ForEach(allLetters, id: \.self) { letter in
-                        Text(letter)
-                            .font(.system(size: 9, weight: .semibold))
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity)
-                    }
+                // 快速索引（仅未搜索时显示，支持点击跳转）
+                if searchText.isEmpty && allLetters.count > 3 {
+                    alphabetIndex(proxy: proxy)
                 }
-                .frame(width: 16)
-                .padding(.vertical, 8)
             }
         }
+    }
+
+    /// 右侧字母表快速索引：点击字母跳转到对应分组
+    private func alphabetIndex(proxy: ScrollViewProxy) -> some View {
+        VStack(spacing: 1) {
+            ForEach(allLetters, id: \.self) { letter in
+                Button {
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        proxy.scrollTo(letter, anchor: .top)
+                    }
+                } label: {
+                    Text(letter)
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .frame(width: 16)
+        .padding(.vertical, 8)
     }
 
     // MARK: - 应用行

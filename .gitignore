@@ -13,6 +13,7 @@ build/
 *.xcarchive
 *.app
 *.dmg
+*.sha256
 
 # Swift Package Manager
 .build/
@@ -28,6 +29,7 @@ Carthage/Build/
 .DS_Store
 *.swp
 *~.nib
+*.profraw
 
 # Claude Code（本机特定配置，不入库）
 .claude/settings.local.json

@@ -53,6 +53,13 @@ final class AppDependencies {
             idle?.markAppActive(bundleID)
         }
 
+        // 应用启动（含定时启动 / 后台启动）时重置闲置基线：
+        // 否则 appLastActiveTime 停留在陈旧时间，应用一启动，下一次闲置检测
+        // （30s tick）就误判为「已闲置超过阈值」而立即退出（如百度网盘定时启动后几十秒被闲置退出）。
+        appMonitorManager.onAppLaunched = { [weak idle] bundleID in
+            idle?.markAppActive(bundleID)
+        }
+
         logs.addSystem(message: "AutoToggle 启动完成", level: .info)
         logs.enforceRetentionPolicy()
 

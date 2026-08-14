@@ -1,8 +1,9 @@
 import SwiftUI
 
 /// AutoToggle 应用入口
-/// 主界面由 AppDelegate 以原生 NSWindow + NSHostingView 创建并管理
-/// 菜单栏图标由 MenuBarExtra 场景提供（辅助入口）
+/// 主窗口由 AppDelegate 以原生 NSWindow + NSHostingView 创建并管理；
+/// 菜单栏图标由 MenuBarController 以 NSStatusItem + 非激活 NSPanel 管理。
+/// 两者都基于 AppKit，因此这里无需声明任何 SwiftUI Scene。
 @main
 struct AutoToggleApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -17,28 +18,6 @@ struct AutoToggleApp: App {
     }
 
     var body: some Scene {
-        // 菜单栏图标 + 下拉面板（辅助入口）
-        MenuBarExtra {
-            MenuBarContentView()
-                .modelContainer(dependencies.modelContainer)
-                .environment(dependencies.menuBarManager)
-                .environment(dependencies.ruleManager)
-                .environment(dependencies.appMonitorManager)
-                .environment(dependencies.idleDetectorManager)
-                .environment(dependencies.appActionManager)
-                .environment(dependencies.scheduleManager)
-                .environment(dependencies.logManager)
-                .environment(dependencies.profileManager)
-                .environment(dependencies.appearanceManager)
-                .environment(dependencies.permissionManager)
-                .environment(dependencies.sleepPreventionManager)
-                .preferredColorScheme(dependencies.appearanceManager.effectiveColorScheme)
-        } label: {
-            Image("MenuBarIcon")
-                .renderingMode(.template)
-        }
-        .menuBarExtraStyle(.window)
-
-        // 主窗口已由 AppDelegate 以原生 NSWindow 创建 — 无需 WindowGroup
+        // 无 SwiftUI 场景：主窗口与菜单栏图标均由 AppKit 侧创建。
     }
 }

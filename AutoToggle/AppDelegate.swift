@@ -1,10 +1,9 @@
 import AppKit
 import SwiftUI
 
-/// 应用代理：使用原生 NSWindow + NSHostingView 管理主窗口
-/// 主界面是 app 的核心，菜单栏仅作为辅助入口
+/// 应用代理：使用原生 NSWindow + NSHostingView 管理主窗口（启动时自动弹出并置前），菜单栏作为辅助入口
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     /// 由 AutoToggleApp 注入的依赖集合
     var dependencies: AppDependencies?
@@ -12,10 +11,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// 主窗口引用
     private var mainWindow: NSWindow?
 
+    /// 菜单栏图标 + 面板控制器
+    private var menuBarController: MenuBarController?
+
     // MARK: - 应用生命周期
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // 标准应用（Dock 图标可见）
+        // 标准应用（Dock 图标可见），启动即弹出主窗口
         NSApp.setActivationPolicy(.regular)
 
         guard let deps = dependencies else { return }
@@ -29,6 +31,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         deps.scheduleManager.startScheduling()
 
         createAndShowMainWindow()
+
+        // 菜单栏图标 + 非激活面板（不抢占其它应用的键盘焦点）
+        menuBarController = MenuBarController(dependencies: deps) { [weak self] in
+            self?.showMainWindow()
+        }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -70,15 +77,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window.setFrameAutosaveName("MainWindow")
         // 关闭窗口时仅移除窗口，app 继续在菜单栏运行
         window.isReleasedWhenClosed = false
+        window.delegate = self
 
         mainWindow = window
 
-        window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(nil)
     }
 
-    /// 显示已存在的主窗口
+    /// 显示已存在的主窗口（置前并获得焦点）
     func showMainWindow() {
+        // 先收起菜单栏面板，避免其盖在主窗口之上
+        menuBarController?.closePanel()
+
+        // 若之前关闭窗口已转入菜单栏模式（Dock 隐藏），恢复 Dock 图标
+        NSApp.setActivationPolicy(.regular)
+
         guard let window = mainWindow else {
             createAndShowMainWindow()
             return
@@ -86,7 +100,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if window.isMiniaturized {
             window.deminiaturize(nil)
         }
-        window.makeKeyAndOrderFront(nil)
+        // activateIgnoringOtherApps 虽已废弃，但仍是唯一能可靠「抢焦点置前」的方式（见 JavaFX/OpenJDK 的结论）
         NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(nil)
+        window.orderFrontRegardless()
+    }
+
+    // MARK: - NSWindowDelegate
+
+    /// 点击红色关闭键后：主窗口关闭，app 转为纯菜单栏模式（从 Dock 消失），
+    /// 引擎继续在后台运行；点击菜单栏「主界面」可重新显示并恢复 Dock 图标。
+    func windowWillClose(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
     }
 }

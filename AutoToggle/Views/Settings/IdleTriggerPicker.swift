@@ -23,8 +23,10 @@ struct IdleTriggerPicker: View {
                     ForEach(presets, id: \.self) { minutes in
                         presetButton(minutes: minutes)
                     }
-                    customButton
                 }
+
+                // 自定义时长：手动输入
+                customMinutesInput
             }
 
             // 闲置判定范围
@@ -104,22 +106,34 @@ struct IdleTriggerPicker: View {
 
     // MARK: - 自定义时长
 
-    private var customButton: some View {
-        let isCustom = !presets.contains(trigger.idleMinutes)
-
-        return Menu {
-            ForEach([2, 20, 45, 90, 120], id: \.self) { minutes in
-                Button(formatMinutes(minutes)) {
-                    trigger.idleMinutes = minutes
-                }
-            }
-        } label: {
-            Text(isCustom ? formatMinutes(trigger.idleMinutes) : "自定义 ▾")
+    /// 自定义时长手动输入（分钟），可直接键入或通过步进器增减
+    private var customMinutesInput: some View {
+        HStack(spacing: 8) {
+            Text("自定义")
                 .font(.caption)
+                .foregroundStyle(.secondary)
+
+            TextField("", value: Binding(
+                get: { trigger.idleMinutes },
+                set: { trigger.idleMinutes = max(1, min(1440, $0)) }
+            ), format: .number.grouping(.never))
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 64)
+                .multilineTextAlignment(.trailing)
+                .labelsHidden()
+
+            Text("分钟")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Stepper("", value: Binding(
+                get: { trigger.idleMinutes },
+                set: { trigger.idleMinutes = max(1, min(1440, $0)) }
+            ), in: 1...1440)
+                .labelsHidden()
+
+            Spacer()
         }
-        .buttonStyle(.bordered)
-        .controlSize(.small)
-        .tint(isCustom ? .blue : nil)
     }
 
     /// 格式化分钟数为可读文本

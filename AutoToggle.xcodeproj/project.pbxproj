@@ -46,12 +46,14 @@
 		C49EB461576D0FBD43C36A6E /* AppPickerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F804E7195FC70954D70E3B /* AppPickerOverlay.swift */; };
 		C515160BF552152258482895 /* PermissionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB429E9215477BB725B419CE /* PermissionManagerTests.swift */; };
 		C9CC23D88968A1ABD3E902AE /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF11B7A0ECCB49AD34D4E15 /* AppTab.swift */; };
+		CF412D2EF27B9CAB1790FE4C /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDC0F7450240A551E8A6E0F /* MenuBarController.swift */; };
 		D5BFF9B2C1EE14A0DCCF7C7E /* IdleDetectorManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A1B43AA34F0DB25AE01A5C /* IdleDetectorManagerTests.swift */; };
 		D7158E07B909403D0D1B748D /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112BAF0FB175B3B34C6B140D /* SettingsTab.swift */; };
 		D877AE2AFEF8CE4DC4B98C0A /* AutoToggleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF812B42A0F3010FF2E7EC /* AutoToggleApp.swift */; };
 		DC0F730B53AB8451EA523ABC /* IdleDecisionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0703F07CB346C05686E9504 /* IdleDecisionEngine.swift */; };
 		DCAF45D582D166EF427BA45A /* TimeTriggerPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD729B0657AB40D15DC9E6 /* TimeTriggerPicker.swift */; };
 		DEFB46EE7AAC54AB17AEB7C0 /* AppMonitorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13EBFF8E0694B1EB4C1B160C /* AppMonitorManager.swift */; };
+		E5263B2448619B7A1EC16072 /* AppSortHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481F9327F99C28DC024E504A /* AppSortHelper.swift */; };
 		E9C1B05341AE2BBBADF670A5 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC574AF9EFFC13C26F02B6A /* MainWindowView.swift */; };
 		F65F2BA19D7B464ED724A0F0 /* LogsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34581249B34158D359E255 /* LogsTab.swift */; };
 /* End PBXBuildFile section */
@@ -82,7 +84,9 @@
 		3C0452B1FF41426E7E2626CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		41679DBDACAB59C2CCC4CABA /* FocusedAppProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedAppProvider.swift; sourceTree = "<group>"; };
 		42A48974E32605E601CF7CE4 /* AppActionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppActionManager.swift; sourceTree = "<group>"; };
+		481F9327F99C28DC024E504A /* AppSortHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSortHelper.swift; sourceTree = "<group>"; };
 		4B5518E77C8E9460884D075E /* SystemIdleProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemIdleProviderTests.swift; sourceTree = "<group>"; };
+		4BDC0F7450240A551E8A6E0F /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		4F7FDF9DC1BFCB2295B6C668 /* SystemIdleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemIdleProvider.swift; sourceTree = "<group>"; };
 		4F858C27609C1D292EA95976 /* IdleDetectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDetectorManager.swift; sourceTree = "<group>"; };
 		5A5A72F92173E21CB22E41C8 /* ProfileRenameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRenameTests.swift; sourceTree = "<group>"; };
@@ -173,6 +177,7 @@
 				A0703F07CB346C05686E9504 /* IdleDecisionEngine.swift */,
 				4F858C27609C1D292EA95976 /* IdleDetectorManager.swift */,
 				B180C6DE0819157A44D92245 /* LogManager.swift */,
+				4BDC0F7450240A551E8A6E0F /* MenuBarController.swift */,
 				9C31B9841597A794E9842C5B /* MenuBarManager.swift */,
 				B78D57481ED216E38C0912E8 /* PermissionManager.swift */,
 				3687AD3B28B2E6D8A94F56EE /* ProfileManager.swift */,
@@ -205,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				F85800472F5E674F01D19C75 /* AppIconProvider.swift */,
+				481F9327F99C28DC024E504A /* AppSortHelper.swift */,
 				2EFC1D2899308A9716AAFC72 /* BundleHelper.swift */,
 			);
 			path = Utilities;
@@ -396,6 +402,7 @@
 				DEFB46EE7AAC54AB17AEB7C0 /* AppMonitorManager.swift in Sources */,
 				C49EB461576D0FBD43C36A6E /* AppPickerOverlay.swift in Sources */,
 				9622C85F022EAA0AC189A162 /* AppRule.swift in Sources */,
+				E5263B2448619B7A1EC16072 /* AppSortHelper.swift in Sources */,
 				C9CC23D88968A1ABD3E902AE /* AppTab.swift in Sources */,
 				822895CB36B12BBC0387A561 /* AppearanceManager.swift in Sources */,
 				D877AE2AFEF8CE4DC4B98C0A /* AutoToggleApp.swift in Sources */,
@@ -411,6 +418,7 @@
 				E9C1B05341AE2BBBADF670A5 /* MainWindowView.swift in Sources */,
 				3A3969A395878B4D1CA36699 /* ManagedAppRow.swift in Sources */,
 				A78D0326A9FE6FA6C9504608 /* MenuBarContentView.swift in Sources */,
+				CF412D2EF27B9CAB1790FE4C /* MenuBarController.swift in Sources */,
 				872E1FA4793EF41FB3A14031 /* MenuBarManager.swift in Sources */,
 				3E6C058617184C537CCF9911 /* OverviewTab.swift in Sources */,
 				4D5B8965FB126B3195777D26 /* PermissionGrantView.swift in Sources */,
@@ -488,7 +496,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -502,7 +510,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 leogottadothebest. All rights reserved.";
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -541,7 +549,7 @@
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = AutoToggle/AutoToggle.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "AutoToggle Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -626,7 +634,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -646,7 +654,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 leogottadothebest. All rights reserved.";
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

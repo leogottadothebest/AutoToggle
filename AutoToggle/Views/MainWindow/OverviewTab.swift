@@ -180,9 +180,11 @@ struct OverviewTab: View {
                 .font(.headline)
 
             let managedBundleIDs = ruleManager.managedBundleIDs()
-            let runningManaged = appMonitorManager.runningApps.filter {
-                managedBundleIDs.contains($0.bundleID)
-            }
+            let runningManaged = AppSortHelper.sorted(
+                appMonitorManager.runningApps.filter {
+                    managedBundleIDs.contains($0.bundleID)
+                }
+            )
 
             if runningManaged.isEmpty {
                 Text(String(localized: "overview.noManagedAppsRunning"))

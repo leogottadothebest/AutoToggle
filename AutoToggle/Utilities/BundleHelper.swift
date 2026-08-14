@@ -41,16 +41,20 @@ enum BundleHelper {
                 ?? $0.infoDictionary?["CFBundleName"] as? String }
     }
 
-    /// 获取所有已安装的应用（按名称排序）
+    /// 获取所有已安装的应用（按界面语言排序）
+    /// 扫描 /Applications、/Applications/Utilities、/System/Applications 与用户 Applications，
+    /// 并按 Bundle ID 去重，确保 Utilities 中的应用（如终端、活动监视器）也完整展示。
     /// - Returns: 所有应用信息列表
     static func allInstalledApps() -> [AppInfo] {
         let commonDirs = [
             "/Applications",
+            "/Applications/Utilities",
             "/System/Applications",
             "\(NSHomeDirectory())/Applications",
         ]
 
         var results: [AppInfo] = []
+        var seenBundleIDs = Set<String>()
         let fileManager = FileManager.default
 
         for dir in commonDirs {
@@ -62,6 +66,7 @@ enum BundleHelper {
                 let appPath = "\(dir)/\(item)"
                 let appName = (item as NSString).deletingPathExtension
                 guard let bundleID = bundleID(for: appPath) else { continue }
+                guard seenBundleIDs.insert(bundleID).inserted else { continue }
 
                 let displayName = displayName(for: appPath) ?? appName
                 results.append(AppInfo(
@@ -72,6 +77,6 @@ enum BundleHelper {
             }
         }
 
-        return results.sorted { $0.displayName.localizedStandardCompare($1.displayName) == .orderedAscending }
+        return AppSortHelper.sorted(results)
     }
 }

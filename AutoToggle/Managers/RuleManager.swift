@@ -70,6 +70,12 @@ final class RuleManager {
         saveChanges()
     }
 
+    /// 按规则 ID 切换启用/禁用（供菜单栏等仅有 ID 的场景使用）
+    func toggleRule(id: UUID) {
+        guard let rule = allRules.first(where: { $0.id == id }) else { return }
+        toggleRule(rule)
+    }
+
     // MARK: - 查询
 
     /// 刷新规则缓存

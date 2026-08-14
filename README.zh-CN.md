@@ -16,20 +16,22 @@ AutoToggle 是一款轻量级 macOS 菜单栏应用，通过自定义规则**自
 - **🕐 定时规则** — 按具体时间和星期自动启动或退出应用
 - **💤 闲置检测** — 应用闲置指定分钟后自动退出或隐藏
 - **🛡️ 假闲置检测** — 智能识别音频播放、会议等场景，避免误关
-- **📋 菜单栏图标 + 主窗口** — 菜单栏图标作为常驻快速入口，主窗口集中管理规则与日志
+- **📋 菜单栏图标 + 主窗口** — 主窗口启动即打开，集中管理规则与日志；关闭窗口后应用从 Dock 消失（继续驻留菜单栏），菜单栏图标作为常驻快速入口
 - **🔌 开机自启** — 登录时自动启动，无需手动操作
 - **🔒 隐私优先** — 所有数据存储在本地，无网络请求，无数据上传
 - **🇨🇳 中文原生** — 全中文界面，对微信/钉钉/飞书等国内应用优化
+- **🔍 智能应用选择器** — 完整扫描含实用工具在内的所有应用，按界面语言排序（中文按拼音、英文按字母），支持点击字母表快速导航
+- **⏰ 菜单栏显示定时任务** — 即将触发的定时启动/退出与被管理应用并列展示；已关闭的定时任务仍显示，可在右侧开关一键切换
 
 ## 📥 安装
 
 ### 从 GitHub Release 下载
 
 1. 前往 [Releases](https://github.com/leogottadothebest/AutoToggle/releases) 页面
-2. 下载最新的 `.dmg` 文件（如 `AutoToggle-1.0.0.dmg`）
+2. 下载最新的 `.dmg` 文件（如 `AutoToggle-1.1.0.dmg`）
 3. 打开 DMG，将 AutoToggle 拖入「应用程序」文件夹
 4. 首次启动时，右键点击 AutoToggle.app →「打开」以绕过 Gatekeeper
-5. 根据引导授予「辅助功能」权限（可选，用于更精确的闲置检测）
+5. 根据引导授予「辅助功能」权限（可选，用于更精确的闲置检测），之后也可在「设置 → 权限」中查看或重新请求。
 
 ### 从源码构建
 
@@ -41,10 +43,13 @@ cd AutoToggle
 # 安装依赖（需要 XcodeGen）
 brew install xcodegen
 
+# 生成稳定的自签名签名证书（保证辅助功能授权在每次重建后不失效）
+scripts/bootstrap-signing.sh
+
 # 生成 Xcode 项目
 xcodegen generate
 
-# 构建
+# 构建（Release）
 xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Release build
 
 # 成品在 DerivedData 目录中
@@ -56,7 +61,7 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 
 ### 创建定时规则
 
-1. 点击菜单栏图标 → **设置** → **规则** 选项卡
+1. 打开主窗口（启动时自动弹出；或点击菜单栏图标 → **主界面**）并进入 **App** 选项卡
 2. 点击 **添加规则**
 3. 搜索并选择目标应用
 4. 选择 **定时启动** 或 **定时退出**
@@ -67,7 +72,7 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 
 1. 同上进入规则编辑
 2. 选择 **闲置退出** 或 **闲置隐藏**
-3. 设置闲置时长（1分钟 ~ 2小时）
+3. 设置闲置时长（选择预设或手动输入任意分钟数）
 4. 点击 **保存**
 
 > 💡 **提示**: 正在播放音乐、视频会议的应用程序不会被自动关闭。
@@ -105,7 +110,7 @@ AutoToggle/
 │   ├── MenuBar/                # 菜单栏面板
 │   ├── Settings/               # 规则编辑组件
 │   └── Onboarding/             # 权限引导
-├── Utilities/                  # 工具类（BundleHelper / AppIconProvider）
+├── Utilities/                  # 工具类（BundleHelper / AppIconProvider / AppSortHelper）
 └── Resources/                  # Assets.xcassets / Localizable.xcstrings
 ```
 

@@ -1,6 +1,19 @@
 import Foundation
 import AppKit
 
+/// 定时任务快照（供菜单栏等 UI 展示）
+struct UpcomingScheduledTrigger: Identifiable {
+    let id: UUID
+    let appName: String
+    let bundleID: String
+    /// true = 定时启动，false = 定时退出
+    let isLaunch: Bool
+    /// 规则是否启用（禁用规则仍展示，供右侧开关切换）
+    let isEnabled: Bool
+    /// 下次触发时间
+    let date: Date
+}
+
 /// 定时调度管理器
 /// 负责 Timer 驱动的规则评估和触发执行
 @MainActor
@@ -57,6 +70,29 @@ final class ScheduleManager {
     /// 时区等设置变化后，立即重新评估一次调度（无需等待下一分钟）
     func reevaluate() {
         evaluateRules()
+    }
+
+    /// 未来即将触发的定时任务（含禁用规则，按触发时间升序，最多 limit 条）
+    func upcomingScheduledTriggers(limit: Int = 5) -> [UpcomingScheduledTrigger] {
+        let now = Date()
+        let calendar = scheduleCalendar
+        var results: [UpcomingScheduledTrigger] = []
+
+        // 遍历全部规则（含禁用），让关闭的定时任务仍显示在菜单栏、可通过右侧开关重新启用
+        for rule in ruleManager.allRules where rule.ruleType.isScheduled {
+            guard let trigger = rule.timeTrigger,
+                  let next = nextTrigger(for: trigger, after: now, calendar: calendar) else { continue }
+            results.append(UpcomingScheduledTrigger(
+                id: rule.id,
+                appName: rule.appName,
+                bundleID: rule.appBundleID,
+                isLaunch: rule.ruleType == .scheduledLaunch,
+                isEnabled: rule.isEnabled,
+                date: next
+            ))
+        }
+
+        return results.sorted { $0.date < $1.date }.prefix(limit).map { $0 }
     }
 
     // MARK: - 内部方法

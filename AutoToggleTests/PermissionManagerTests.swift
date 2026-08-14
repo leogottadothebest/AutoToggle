@@ -49,6 +49,46 @@ struct PermissionManagerTests {
         #expect(!granted)
         #expect(!manager.accessibilityGranted)
     }
+
+    @Test
+    @MainActor
+    func 从系统设置返回后仍授权提示重启() {
+        // macOS 对运行中进程缓存授权状态：授权后 AXIsProcessTrusted() 仍返回 false，需重启。
+        let provider = FakeTrustProvider(trusted: false)
+        let manager = PermissionManager(trustProvider: provider)
+        #expect(!manager.needsRestartToApplyAccessibility)
+
+        manager.openAccessibilitySettings()
+        manager.handleAppBecameActive() // 模拟从系统设置返回
+
+        #expect(manager.needsRestartToApplyAccessibility)
+    }
+
+    @Test
+    @MainActor
+    func 返回时已授权则不提示重启() {
+        let provider = FakeTrustProvider(trusted: false)
+        let manager = PermissionManager(trustProvider: provider)
+
+        // 用户在系统设置中授权后（provider 变为 trusted），返回应用
+        provider.trusted = true
+        manager.openAccessibilitySettings()
+        manager.handleAppBecameActive()
+
+        #expect(manager.accessibilityGranted)
+        #expect(!manager.needsRestartToApplyAccessibility)
+    }
+
+    @Test
+    @MainActor
+    func 未去系统设置直接激活不提示重启() {
+        let provider = FakeTrustProvider(trusted: false)
+        let manager = PermissionManager(trustProvider: provider)
+
+        manager.handleAppBecameActive() // 未先 openAccessibilitySettings/requestAccessibility
+
+        #expect(!manager.needsRestartToApplyAccessibility)
+    }
 }
 
 /// 测试用假信任提供者（类 + 可变状态，仅用于单线程测试环境）

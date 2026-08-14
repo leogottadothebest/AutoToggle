@@ -106,8 +106,15 @@ final class AppActionManager {
             return
         }
 
-        // 强制退出模式：继续第二级和第三级降级
-        let terminateSuccess = runningApp.terminate()
+        // 强制退出模式：继续第二级和第三级降级。
+        // L-4：AppleScript 优雅退出可能已让应用真正退出、但脚本仍返回错误，此时 runningApp
+        // 是陈旧快照（其 PID 可能已被系统复用给其它进程）。先按 bundleID 重新解析并校验
+        // PID 未变，避免 terminate() 误杀同用户的无关进程（CWE-362）。
+        guard let current = findRunningApp(bundleID: bundleID),
+              current.processIdentifier == runningApp.processIdentifier else {
+            return
+        }
+        let terminateSuccess = current.terminate()
 
         // 给 terminate 3 秒时间生效
         Task {

@@ -16,20 +16,22 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 - **🕐 Scheduled rules** — automatically launch or quit apps at specific times and weekdays
 - **💤 Idle detection** — auto-quit or hide apps after they have been idle for a set duration
 - **🛡️ Fake-idle detection** — intelligently recognizes audio playback, meetings, and similar scenarios to avoid false quits
-- **📋 Menu bar icon + main window** — the menu bar icon is an always-on quick entry, while the main window manages rules and logs
+- **📋 Menu bar icon + main window** — the main window opens on launch to manage rules and logs; closing the window hides the app from the Dock (it keeps running in the menu bar), and the menu bar icon is an always-on quick entry
 - **🔌 Launch at login** — start automatically on sign-in, no manual steps
 - **🔒 Privacy-first** — all data is stored locally, with no network requests and no data upload
 - **🇨🇳 Native Chinese** — full Chinese UI, optimized for WeChat / DingTalk / Feishu and other domestic apps
+- **🔍 Smart app picker** — scans every app including Utilities, sorts by UI language (pinyin for Chinese, A–Z for English), with a clickable letter index and auto-focused search
+- **⏰ Menu bar scheduled tasks** — upcoming scheduled launches/quits are shown right beside the managed apps; disabled tasks stay listed and can be toggled from the switch on the right
 
 ## 📥 Installation
 
 ### Download from GitHub Release
 
 1. Go to the [Releases](https://github.com/leogottadothebest/AutoToggle/releases) page
-2. Download the latest `.dmg` file (e.g. `AutoToggle-1.0.0.dmg`)
+2. Download the latest `.dmg` file (e.g. `AutoToggle-1.1.0.dmg`)
 3. Open the DMG and drag AutoToggle into the Applications folder
 4. On first launch, right-click AutoToggle.app → **Open** to bypass Gatekeeper
-5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection)
+5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection) — you can also manage it later in **Settings → Permissions**.
 
 ### Build from source
 
@@ -41,10 +43,13 @@ cd AutoToggle
 # Install dependencies (XcodeGen required)
 brew install xcodegen
 
+# Create the stable self-signed signing certificate (keeps the Accessibility permission valid across rebuilds)
+scripts/bootstrap-signing.sh
+
 # Generate the Xcode project
 xcodegen generate
 
-# Build
+# Build (Release)
 xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Release build
 
 # The app is in the DerivedData directory
@@ -56,7 +61,7 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 
 ### Create a scheduled rule
 
-1. Click the menu bar icon → **Settings** → **Rules** tab
+1. Open the main window (it opens automatically on launch; or click the menu bar icon → **Main Window**) and go to the **Apps** tab
 2. Click **Add Rule**
 3. Search for and select the target app
 4. Choose **Scheduled Launch** or **Scheduled Quit**
@@ -67,7 +72,7 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 
 1. Enter rule editing as above
 2. Choose **Idle Quit** or **Idle Hide**
-3. Set the idle duration (1 minute to 2 hours)
+3. Set the idle duration (pick a preset or type a custom number of minutes)
 4. Click **Save**
 
 > 💡 **Tip**: Apps that are playing music or in a video call will not be closed automatically.
@@ -105,7 +110,7 @@ AutoToggle/
 │   ├── MenuBar/                # menu bar panel
 │   ├── Settings/               # rule editing components
 │   └── Onboarding/             # permission onboarding
-├── Utilities/                  # helpers (BundleHelper / AppIconProvider)
+├── Utilities/                  # helpers (BundleHelper / AppIconProvider / AppSortHelper)
 └── Resources/                  # Assets.xcassets / Localizable.xcstrings
 ```
 

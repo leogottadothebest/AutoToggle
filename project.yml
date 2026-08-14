@@ -9,8 +9,8 @@ options:
 
 settings:
   base:
-    MARKETING_VERSION: "1.0.0"
-    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: "1.1.0"
+    CURRENT_PROJECT_VERSION: 2
     SWIFT_VERSION: "6.0"
     INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 leogottadothebest. All rights reserved."
 
@@ -25,15 +25,20 @@ targets:
         INFOPLIST_FILE: AutoToggle/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.autotoggle.app
         GENERATE_INFOPLIST_FILE: false
-        # ad-hoc 签名（无需开发者账号），但保留 Hardened Runtime 与最小化授权
         CODE_SIGN_STYLE: Manual
-        CODE_SIGN_IDENTITY: "-"
         ENABLE_HARDENED_RUNTIME: YES
         CODE_SIGN_ENTITLEMENTS: AutoToggle/AutoToggle.entitlements
         ARCHS: arm64
         EXCLUDED_ARCHS: x86_64
       configs:
+        Debug:
+          # Debug 仅用于 Xcode 调试器附加：ad-hoc + 注入 get-task-allow（允许调试器附加/测试）。
+          CODE_SIGN_IDENTITY: "-"
         Release:
+          # 稳定自签名证书（scripts/bootstrap-signing.sh 生成，证书在专用钥匙串 AutoToggle.keychain-db）。
+          # 不用 ad-hoc "-"：ad-hoc 的 designated requirement 是 cdhash，每次重建都变，
+          # 会导致 TCC 辅助功能授权失效。自签名证书使身份只依赖 bundle id + 证书，重建不变。
+          CODE_SIGN_IDENTITY: "AutoToggle Development"
           # ad-hoc 签名默认会注入 get-task-allow 调试授权（允许任意进程附加调试/注入代码）。
           # 发布构建必须关闭注入，仅保留我们声明的 apple-events 授权。
           CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO

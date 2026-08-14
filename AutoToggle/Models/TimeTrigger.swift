@@ -71,7 +71,10 @@ struct IdleTrigger: Codable, Equatable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        idleMinutes = try container.decodeIfPresent(Int.self, forKey: .idleMinutes) ?? 10
+        let decodedMinutes = try container.decodeIfPresent(Int.self, forKey: .idleMinutes) ?? 10
+        // L-3：解码层钳制范围（1...1440，与 UI 自定义输入上限一致），
+        // 防止损坏/旧版 store 中越界或负值导致 `idleMinutes * 60` 整数溢出崩溃或规则立即触发。
+        idleMinutes = min(max(decodedMinutes, 1), 1440)
         scope = try container.decodeIfPresent(IdleScope.self, forKey: .scope) ?? .app
     }
 }

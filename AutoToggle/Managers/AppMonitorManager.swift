@@ -17,6 +17,10 @@ final class AppMonitorManager {
     /// 前台应用切换回调（Bundle ID → Void）
     var onFrontmostAppChanged: ((String) -> Void)?
 
+    /// 应用启动回调（Bundle ID → Void）。
+    /// 用于在任意应用（含定时/后台启动）启动时重置其闲置基线，避免陈旧活跃时间导致闲置规则立即误触发。
+    var onAppLaunched: ((String) -> Void)?
+
     // MARK: - 私有属性
 
     /// NSWorkspace 通知观察者 tokens
@@ -48,6 +52,8 @@ final class AppMonitorManager {
                 if !self.runningApps.contains(where: { $0.bundleID == info.bundleID }) {
                     self.runningApps.append(info)
                 }
+                // 应用启动即开启新的闲置周期（见 onAppLaunched 文档）
+                self.onAppLaunched?(bundleID)
             }
         }
         observerTokens.append(launchToken)

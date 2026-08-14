@@ -60,6 +60,20 @@ struct PermissionGrantView: View {
                     .controlSize(.large)
                 }
 
+                if permissionManager.needsRestartToApplyAccessibility {
+                    VStack(spacing: 8) {
+                        Label("若你已在系统设置中开启授权，重启应用后即可生效。",
+                              systemImage: "arrow.clockwise")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Button("立即重启") {
+                            permissionManager.restartToApplyAccessibility()
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.large)
+                    }
+                }
+
                 Button(permissionManager.accessibilityGranted ? "开始使用" : "跳过，稍后设置") {
                     stopCheckingPermission()
                     onDismiss()
