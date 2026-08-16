@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>AutoToggle</title>
+        <item>
+            <title>2.0.0</title>
+            <pubDate>Sun, 16 Aug 2026 18:17:27 +0800</pubDate>
+            <sparkle:version>4</sparkle:version>
+            <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.0.0/AutoToggle-2.0.0.dmg" length="3248718" type="application/octet-stream" sparkle:edSignature="nabmGJs3uXtDJH8Tz2qoZW3GvsZE9/Km85eSx2ZXZklt0rFSrbAdhzwU1wemM20oqmOWMHcNa9qkmioInbPWAQ=="/>
+        </item>
+    </channel>
+</rss>
