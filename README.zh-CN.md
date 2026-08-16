@@ -28,8 +28,14 @@ AutoToggle 是一款轻量级 macOS 菜单栏应用，通过自定义规则**自
 
 ### 从 GitHub Release 下载
 
+> ⚖️ **版本选择**：本项目提供两条版本线——
+> - **1.2.0 及更早**：离线稳定版，完全不联网、无自动更新，最安全；
+> - **2.0.0 起**：内置 Sparkle 自动更新，会周期性联网检查新版本（可在设置中关闭自动检查）。
+>
+> 需要彻底离线请选 1.2.0；需要自动更新请选 2.0.0 及更新版本。
+
 1. 前往 [Releases](https://github.com/leogottadothebest/AutoToggle/releases) 页面
-2. 下载最新的 `.dmg` 文件（如 `AutoToggle-1.2.0.dmg`）
+2. 下载 `.dmg` 文件（如 `AutoToggle-2.0.0.dmg`）
 3. 打开 DMG，将 AutoToggle 拖入「应用程序」文件夹
 4. 首次启动时，右键点击 AutoToggle.app →「打开」以绕过 Gatekeeper
 5. 根据引导授予「辅助功能」权限（可选，用于更精确的闲置检测），之后也可在「设置 → 权限」中查看或重新请求。
