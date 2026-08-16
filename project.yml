@@ -2,15 +2,15 @@ name: AutoToggle
 options:
   bundleIdPrefix: com.autotoggle
   deploymentTarget:
-    macOS: "26.0"
+    macOS: "14.0"
   xcodeVersion: "26.0"
   generateEmptyDirectories: true
   developmentLanguage: zh-Hans
 
 settings:
   base:
-    MARKETING_VERSION: "1.2.0"
-    CURRENT_PROJECT_VERSION: 3
+    MARKETING_VERSION: "1.3.0"
+    CURRENT_PROJECT_VERSION: 6
     SWIFT_VERSION: "6.0"
     INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 leogottadothebest. All rights reserved."
 
@@ -28,8 +28,7 @@ targets:
         CODE_SIGN_STYLE: Manual
         ENABLE_HARDENED_RUNTIME: YES
         CODE_SIGN_ENTITLEMENTS: AutoToggle/AutoToggle.entitlements
-        ARCHS: arm64
-        EXCLUDED_ARCHS: x86_64
+        ARCHS: "$(ARCHS_STANDARD)"
       configs:
         Debug:
           # Debug 仅用于 Xcode 调试器附加：ad-hoc + 注入 get-task-allow（允许调试器附加/测试）。
@@ -47,7 +46,7 @@ targets:
       - name: "SwiftLint"
         script: |
           if which swiftlint > /dev/null; then
-            swiftlint
+            swiftlint --config .swiftlint.yml
           fi
         basedOnDependencyAnalysis: false
         inputFiles: []
@@ -64,3 +63,14 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.autotoggle.app.tests
     dependencies:
       - target: AutoToggle
+
+schemes:
+  AutoToggle:
+    build:
+      targets:
+        AutoToggle: all
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - AutoToggleTests

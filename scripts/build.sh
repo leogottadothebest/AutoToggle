@@ -40,6 +40,12 @@ xcodebuild -project AutoToggle.xcodeproj \
   build \
   -derivedDataPath build/DerivedData
 
+echo "▶ 校验通用二进制 (lipo：arm64 + x86_64)"
+lipo -archs "build/DerivedData/Build/Products/Release/AutoToggle.app/Contents/MacOS/AutoToggle" | grep -q x86_64 || {
+  echo "❌ 产物不是通用二进制（缺少 x86_64）。请检查 project.yml 的 ARCHS 设置。" >&2
+  exit 1
+}
+
 echo "▶ 校验签名门禁 (verify-signing.sh)"
 ./scripts/verify-signing.sh "build/DerivedData/Build/Products/Release/AutoToggle.app"
 

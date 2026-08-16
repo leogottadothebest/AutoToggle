@@ -4,8 +4,8 @@
 
 [English](README.md) · [中文](README.zh-CN.md)
 
-[![Platform](https://img.shields.io/badge/platform-macOS%2026.0%2B-blue)](https://developer.apple.com/macos/)
-[![Architecture](https://img.shields.io/badge/arch-Apple%20Silicon%20only-orange)](#)
+[![Platform](https://img.shields.io/badge/platform-macOS%2014.0%2B-blue)](https://developer.apple.com/macos/)
+[![Architecture](https://img.shields.io/badge/arch-Universal%20(Intel%20%2B%20Apple%20Silicon)-orange)](#)
 [![Swift](https://img.shields.io/badge/swift-6.0-orange)](https://swift.org)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -28,7 +28,7 @@ AutoToggle 是一款轻量级 macOS 菜单栏应用，通过自定义规则**自
 ### 从 GitHub Release 下载
 
 1. 前往 [Releases](https://github.com/leogottadothebest/AutoToggle/releases) 页面
-2. 下载最新的 `.dmg` 文件（如 `AutoToggle-1.2.0.dmg`）
+2. 下载最新的 `.dmg` 文件（如 `AutoToggle-1.3.0.dmg`）
 3. 打开 DMG，将 AutoToggle 拖入「应用程序」文件夹
 4. 首次启动时，右键点击 AutoToggle.app →「打开」以绕过 Gatekeeper
 5. 根据引导授予「辅助功能」权限（可选，用于更精确的闲置检测），之后也可在「设置 → 权限」中查看或重新请求。
@@ -49,13 +49,13 @@ scripts/bootstrap-signing.sh
 # 生成 Xcode 项目
 xcodegen generate
 
-# 构建（Release）
-xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Release build
+# 构建（Release）— 使用 scripts/build.sh（解锁签名钥匙串、运行 xcodegen、构建并校验）
+scripts/build.sh
 
-# 成品在 DerivedData 目录中
+# 成品在 build/DerivedData/Build/Products/Release/AutoToggle.app
 ```
 
-**要求**: Xcode 26.0+, macOS 26.0+
+**要求**: Xcode 26.0+, macOS 14.0+
 
 ## 🎯 使用指南
 
@@ -87,7 +87,7 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 
 ```
 AutoToggle/
-├── AutoToggleApp.swift         # @main 入口（App 场景 + MenuBarExtra）
+├── AutoToggleApp.swift         # @main 入口（空 App 场景；窗口与菜单栏均由 AppKit 创建）
 ├── AppDelegate.swift           # 原生 NSWindow + NSHostingView 主窗口
 ├── AppDependencies.swift       # @MainActor 集中依赖注入
 ├── Info.plist / AutoToggle.entitlements
@@ -129,6 +129,23 @@ AutoToggle/
 - [ ] Shortcuts 集成
 - [ ] 应用使用统计
 - [ ] 规则模板市场
+
+## ❓ FAQ / 故障排查
+
+**「无法打开 AutoToggle，因为它来自身份不明的开发者」**
+这是自签名（未公证）的正常提示。首次打开时**右键点击 AutoToggle.app → 打开**即可绕过。也可以先核对 DMG 的 SHA-256（每个 Release 附带 `.sha256` 文件），再运行 `xattr -dr com.apple.quarantine /Applications/AutoToggle.app` 永久解除。
+
+**系统设置里已授予「辅助功能」，但应用仍提示未授权**
+macOS 会缓存运行中进程的授权状态。授予后**重启 AutoToggle** 即可生效。若仍无效，运行 `tccutil reset Accessibility com.autotoggle.app`，然后在「系统设置 → 隐私与安全性 → 辅助功能」移除并重新添加 AutoToggle。
+
+**为什么应用被自动退出了？**
+是闲置规则触发了：应用闲置超过设定时长后被自动退出/隐藏。可在「App」选项卡关闭或删除对应的闲置规则。
+
+**为什么目标应用退不掉？**
+三级退出回退（AppleScript → terminate → forceTerminate）若全部失败，通常是目标应用弹出了「是否保存更改？」这类模态框，或未授予「自动化」权限。先手动关掉模态框，并在「系统设置 → 隐私与安全性 → 自动化」确认 AutoToggle 有权控制该应用。
+
+**我是 1.2.0 用户，如何升级到 1.3.0？**
+1.x 离线线无自动更新，请到 Releases 页手动下载 `AutoToggle-1.3.0.dmg` 重新安装。
 
 ## 📄 许可
 

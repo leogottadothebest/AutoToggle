@@ -31,5 +31,8 @@ Carthage/Build/
 *~.nib
 *.profraw
 
+# 内部素材（图标母版，不进 git / 公开仓库）
+app图标.png
+
 # Claude Code（本机特定配置，不入库）
 .claude/settings.local.json

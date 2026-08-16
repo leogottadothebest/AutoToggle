@@ -301,7 +301,7 @@ struct SettingsTab: View {
                 HStack {
                     Text("最低系统要求")
                     Spacer()
-                    Text("macOS 26.0 (Apple Silicon)")
+                    Text("macOS 14.0+ (Universal)")
                         .foregroundStyle(.secondary)
                 }
             } header: {

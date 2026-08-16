@@ -83,18 +83,28 @@ final class PermissionManager {
         self.trustProvider = trustProvider
         self.accessibilityGranted = trustProvider.isTrusted()
         observePermissionChanges()
-        startPeriodicRefresh()
+        if !accessibilityGranted {
+            startPeriodicRefreshIfNeeded()
+        }
     }
 
-    /// 启动周期性刷新：每 3 秒重新查询一次 AXIsProcessTrusted()。
+    /// 启动周期性刷新（若尚未启动）：每 3 秒重新查询一次 AXIsProcessTrusted()。
     /// 应用切换为 .accessory（菜单栏模式）后，didBecomeActive 可能不再可靠触发，
     /// 这里用轻量定时重查兜底，确保权限状态在用户授权后能及时更新。
-    private func startPeriodicRefresh() {
+    /// 已授权后不再轮询（见 refresh()），避免永久 3s 空转耗电。
+    private func startPeriodicRefreshIfNeeded() {
+        guard refreshTimer == nil else { return }
         refreshTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 self?.refresh()
             }
         }
+    }
+
+    /// 停止周期性刷新（授权已生效，无需继续轮询）。
+    private func stopPeriodicRefresh() {
+        refreshTimer?.invalidate()
+        refreshTimer = nil
     }
 
     /// 刷新权限状态（例如用户从系统设置返回后）
@@ -106,6 +116,9 @@ final class PermissionManager {
         }
         if granted {
             needsRestartToApplyAccessibility = false
+            stopPeriodicRefresh()
+        } else {
+            startPeriodicRefreshIfNeeded()
         }
 
         // 未授权时输出一次可操作的诊断（指出是否 ad-hoc 签名这个常见根因），授权后复位

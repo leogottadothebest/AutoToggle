@@ -4,6 +4,7 @@ import SwiftUI
 /// 支持活动日志和系统日志的切换和浏览
 struct LogsTab: View {
     @Environment(LogManager.self) private var logManager
+    @Environment(DiagnosticsManager.self) private var diagnosticsManager
 
     /// 当前查看的日志分类
     @State private var selectedCategory: LogCategory = .activity
@@ -41,6 +42,15 @@ struct LogsTab: View {
             Text(String(localized: "log.entryCount \(entries.count)"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            // 导出诊断按钮
+            Button(action: { diagnosticsManager.exportDiagnostics() }) {
+                Label("导出诊断", systemImage: "square.and.arrow.up")
+                    .labelStyle(.iconOnly)
+            }
+            .buttonStyle(.plain)
+            .controlSize(.small)
+            .help("导出诊断报告")
 
             // 清除按钮
             Button(action: { showClearConfirmation = true }) {

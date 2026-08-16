@@ -34,4 +34,43 @@ struct IdleTriggerTests {
         #expect(IdleScope.app.rawValue == "app")
         #expect(IdleScope.system.rawValue == "system")
     }
+
+    // MARK: - 畸形/越界 JSON 防护（解码层钳制）
+
+    @Test("idleMinutes 超过上限被钳制到 1440")
+    func oversizedIdleMinutesClampsToUpperBound() throws {
+        let json = #"{"idleMinutes": 9999}"#.data(using: .utf8)!
+        let trigger = try JSONDecoder().decode(IdleTrigger.self, from: json)
+        #expect(trigger.idleMinutes == 1440)
+    }
+
+    @Test("负数 idleMinutes 被钳制到 1")
+    func negativeIdleMinutesClampsToLowerBound() throws {
+        let json = #"{"idleMinutes": -5}"#.data(using: .utf8)!
+        let trigger = try JSONDecoder().decode(IdleTrigger.self, from: json)
+        #expect(trigger.idleMinutes == 1)
+    }
+
+    @Test("零值 idleMinutes 被钳制到 1")
+    func zeroIdleMinutesClampsToLowerBound() throws {
+        let json = #"{"idleMinutes": 0}"#.data(using: .utf8)!
+        let trigger = try JSONDecoder().decode(IdleTrigger.self, from: json)
+        #expect(trigger.idleMinutes == 1)
+    }
+
+    @Test("缺少 idleMinutes 字段回退默认 10")
+    func missingIdleMinutesFallsBackToDefault() throws {
+        let json = #"{}"#.data(using: .utf8)!
+        let trigger = try JSONDecoder().decode(IdleTrigger.self, from: json)
+        #expect(trigger.idleMinutes == 10)
+        #expect(trigger.scope == .app)
+    }
+
+    @Test("idleMinutes 类型错误（字符串）抛解码错误")
+    func wrongTypedIdleMinutesThrows() {
+        let json = #"{"idleMinutes": "abc"}"#.data(using: .utf8)!
+        #expect(throws: (any Error).self) {
+            try JSONDecoder().decode(IdleTrigger.self, from: json)
+        }
+    }
 }

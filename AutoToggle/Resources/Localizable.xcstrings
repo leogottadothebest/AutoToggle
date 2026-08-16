@@ -1,8 +1,6 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
-    "%@ 条规则": {},
-    "%@ 条记录": {},
     "10 秒": {
       "localizations": {
         "en": {
@@ -85,7 +83,16 @@
         }
       }
     },
-    "AutoToggle 需要以下权限来正常工作：": {},
+    "AutoToggle 需要以下权限来正常工作：": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AutoToggle needs the following permission to work properly:"
+          }
+        }
+      }
+    },
     "English": {},
     "appPicker.cancel": {
       "extractionState": "manual",
@@ -125,9 +132,21 @@
       "extractionState": "manual",
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld apps"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld app"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld apps"
+                }
+              }
+            }
           }
         },
         "zh-Hans": {
@@ -618,9 +637,21 @@
       "extractionState": "manual",
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld entries"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld entry"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld entries"
+                }
+              }
+            }
           }
         },
         "zh-Hans": {
@@ -852,7 +883,6 @@
         }
       }
     },
-    "macOS 26.0 (Apple Silicon)": {},
     "overview.managedApps": {
       "extractionState": "manual",
       "localizations": {
@@ -1095,9 +1125,21 @@
       "extractionState": "manual",
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld rules"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld rule"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld rules"
+                }
+              }
+            }
           }
         },
         "zh-Hans": {
@@ -1845,7 +1887,16 @@
         }
       }
     },
-    "例如：Safari、微信、Xcode、Terminal": {},
+    "例如：Safari、微信、Xcode、Terminal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For example: Safari, WeChat, Xcode, Terminal"
+          }
+        }
+      }
+    },
     "保存": {
       "localizations": {
         "en": {
@@ -2186,7 +2237,16 @@
         }
       }
     },
-    "尝试使用不同的关键词，或检查应用是否安装在 /Applications 目录下": {},
+    "尝试使用不同的关键词，或检查应用是否安装在 /Applications 目录下": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try different keywords, or check that the app is installed under /Applications"
+          }
+        }
+      }
+    },
     "工作日": {
       "localizations": {
         "en": {
@@ -2237,8 +2297,26 @@
         }
       }
     },
-    "应用将被优雅退出（优先使用 AppleScript 保存数据）": {},
-    "应用窗口将被隐藏，应用继续在后台运行": {},
+    "应用将被优雅退出（优先使用 AppleScript 保存数据）": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The app will be quit gracefully (AppleScript is preferred to save data)"
+          }
+        }
+      }
+    },
+    "应用窗口将被隐藏，应用继续在后台运行": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The app's windows will be hidden and it keeps running in the background"
+          }
+        }
+      }
+    },
     "应用规则": {
       "localizations": {
         "en": {
@@ -2359,7 +2437,16 @@
         }
       }
     },
-    "打开主界面添加定时或闲置规则": {},
+    "打开主界面添加定时或闲置规则": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the main window to add a scheduled or idle rule"
+          }
+        }
+      }
+    },
     "打开系统设置": {
       "localizations": {
         "en": {
@@ -2500,7 +2587,16 @@
         }
       }
     },
-    "暂无%@日志": {},
+    "暂无%@日志": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No %@ logs"
+          }
+        }
+      }
+    },
     "暂无被管理的应用": {
       "localizations": {
         "en": {
@@ -2551,8 +2647,26 @@
         }
       }
     },
-    "未找到匹配「%@」的规则": {},
-    "未找到匹配的应用": {},
+    "未找到匹配「%@」的规则": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No rules matching \"%@\""
+          }
+        }
+      }
+    },
+    "未找到匹配的应用": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching apps found"
+          }
+        }
+      }
+    },
     "未授权": {
       "localizations": {
         "en": {
@@ -2783,7 +2897,16 @@
         }
       }
     },
-    "点击搜索并选择应用": {},
+    "点击搜索并选择应用": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search and select an app"
+          }
+        }
+      }
+    },
     "版本": {
       "localizations": {
         "en": {
@@ -2834,7 +2957,16 @@
         }
       }
     },
-    "目标应用": {},
+    "目标应用": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target app"
+          }
+        }
+      }
+    },
     "直接终止应用进程，不会提示保存数据": {
       "localizations": {
         "en": {
@@ -2855,8 +2987,26 @@
         }
       }
     },
-    "确定要删除配置方案「%@」吗？其中的所有规则将被永久删除。此操作不可撤销。": {},
-    "确定要清除所有「%@」日志吗？此操作不可撤销。": {},
+    "确定要删除配置方案「%@」吗？其中的所有规则将被永久删除。此操作不可撤销。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete profile \"%@\"? All its rules will be permanently deleted. This cannot be undone."
+          }
+        }
+      }
+    },
+    "确定要清除所有「%@」日志吗？此操作不可撤销。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear all \"%@\" logs? This cannot be undone."
+          }
+        }
+      }
+    },
     "稍后重启": {
       "localizations": {
         "en": {
@@ -2997,7 +3147,16 @@
         }
       }
     },
-    "触发类型": {},
+    "触发类型": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trigger type"
+          }
+        }
+      }
+    },
     "设置 0 表示永久保留/无限制。超过文件大小上限的旧日志将被自动清理。": {
       "localizations": {
         "en": {
@@ -3098,7 +3257,16 @@
         }
       }
     },
-    "输入应用名称进行搜索": {},
+    "输入应用名称进行搜索": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type an app name to search"
+          }
+        }
+      }
+    },
     "运行中": {
       "localizations": {
         "en": {
@@ -3149,7 +3317,16 @@
         }
       }
     },
-    "退出应用": {},
+    "退出应用": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit app"
+          }
+        }
+      }
+    },
     "退出应用前发送通知": {
       "localizations": {
         "en": {
@@ -3240,7 +3417,16 @@
         }
       }
     },
-    "闲置 %@": {},
+    "闲置 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idle %@"
+          }
+        }
+      }
+    },
     "闲置判定": {
       "localizations": {
         "en": {
@@ -3251,7 +3437,16 @@
         }
       }
     },
-    "闲置后执行": {},
+    "闲置后执行": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action after idle"
+          }
+        }
+      }
+    },
     "闲置多久后触发": {
       "localizations": {
         "en": {
@@ -3302,7 +3497,16 @@
         }
       }
     },
-    "隐藏窗口": {},
+    "隐藏窗口": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide windows"
+          }
+        }
+      }
+    },
     "需要重启": {
       "localizations": {
         "en": {
@@ -3329,6 +3533,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hong Kong"
+          }
+        }
+      }
+    },
+    "导出诊断": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export diagnostics"
           }
         }
       }

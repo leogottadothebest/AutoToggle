@@ -4,6 +4,27 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-08-16
+
+### 变更
+
+- 部署目标降至 macOS 14.0，改为通用二进制（Apple Silicon + Intel）
+- 引入工具链钉版（Brewfile / Mintfile / .swiftlint.yml / .swiftformat / .editorconfig / Makefile）
+- 提交共享 Xcode scheme；新增 `make test` / `make lint` / `make format` 快捷入口
+- 新增 GitHub Actions CI（build + test + lint + 覆盖率）
+
+### 新增
+
+- SwiftData 版本化 Schema（`AppSchema`）+ 损坏 store 自动备份重建（不再因 store 损坏启动崩溃）
+- 统一 os.Logger 日志 facade；「日志 → 导出诊断」一键生成本地诊断报告
+- 隐私政策（PRIVACY.md）、安全策略（SECURITY.md）、贡献指南（CONTRIBUTING.md）、行为准则（CODE_OF_CONDUCT.md）、Issue/PR 模板
+- 无障碍：菜单栏图标与图标按钮补齐 VoiceOver 标签
+
+### 修复
+
+- 授权辅助功能后停止 3 秒轮询，降低待机能耗
+- 修复英文界面下系统权限弹窗仍为中文（`NSAppleEventsUsageDescription` 本地化）
+
 ## [1.2.0] - 2026-08-15
 
 ### 新增

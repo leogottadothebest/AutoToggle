@@ -1,0 +1,36 @@
+# SwiftLint 配置（AutoToggle，Swift 6）
+# 调用：swiftlint --config .swiftlint.yml（Makefile / CI / preBuildScript 均引用）
+
+included:
+  - AutoToggle
+  - AutoToggleTests
+
+excluded:
+  - build
+  - .build
+  - DerivedData
+
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - force_unwrapping
+  - force_cast
+  - closure_spacing
+  - vertical_whitespace_closing_braces
+
+disabled_rules:
+  - line_length
+  - type_body_length
+  - file_length
+  - function_body_length
+
+force_unwrapping: warning
+force_cast: warning
+
+identifier_name:
+  min_length: 2
+  excluded:
+    - id
+    - en
+    - zh
+    - on

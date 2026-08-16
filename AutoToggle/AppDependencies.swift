@@ -19,19 +19,23 @@ final class AppDependencies {
     let idleDetectorManager: IdleDetectorManager
     let profileManager: ProfileManager
     let sleepPreventionManager: SleepPreventionManager
+    let diagnosticsManager = DiagnosticsManager()
 
     init() {
         let container: ModelContainer
         do {
-            container = try ModelContainer(for: AppRule.self, LogEntry.self, Profile.self)
+            container = try ModelContainer(for: AppSchema.schema)
         } catch {
-            // CWE-248：捕获底层错误并写入统一日志，附带可操作提示，
-            // 而非 opaque fatalError 让用户无从排查。
-            let detail = "AutoToggle 数据存储初始化失败：\(error.localizedDescription)。" +
-                         "可在 ~/Library/Application Support/ 下找到 AutoToggle 数据目录，" +
-                         "备份后删除其中的 .store 文件以恢复。"
-            NSLog("[AppDependencies] %@", detail)
-            fatalError(detail)
+            // 数据 store 损坏/无法打开：备份后重建空库，避免硬崩。
+            // 损坏数据保留在 .corrupt-<时间戳> 备份中，用户不会丢数据。
+            let detail = "AutoToggle 数据存储初始化失败：\(error.localizedDescription)"
+            Log.persistence.error("\(detail, privacy: .public)")
+            guard let recovered = Self.recoverModelContainer() else {
+                // 最终兜底：连备份重建都失败才硬崩，附可操作提示。
+                fatalError("\(detail)。可在 ~/Library/Application Support/ 下找到 AutoToggle 数据目录，备份后删除其中的 .store 文件以恢复。")
+            }
+            container = recovered
+            Log.persistence.notice("已备份损坏的数据存储并重建空库")
         }
         modelContainer = container
 
@@ -48,6 +52,7 @@ final class AppDependencies {
         action.configure(logManager: logs)
         rules.configure(logManager: logs)
         rules.configure(profileManager: profiles)
+        diagnosticsManager.configure(permissionManager: permissionManager, logManager: logs, ruleManager: rules)
 
         appMonitorManager.onFrontmostAppChanged = { [weak idle] bundleID in
             idle?.markAppActive(bundleID)
@@ -70,5 +75,33 @@ final class AppDependencies {
         idleDetectorManager = idle
         profileManager = profiles
         sleepPreventionManager = sleep
+    }
+
+    // MARK: - 数据恢复
+
+    /// 备份损坏的 SwiftData store（含 -wal/-shm 伴生文件）后重建空库。
+    /// 返回重建成功的 ModelContainer；任一步失败返回 nil（调用方兜底 fatalError）。
+    private static func recoverModelContainer() -> ModelContainer? {
+        let fileManager = FileManager.default
+        guard let supportDir = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        let base = supportDir.appendingPathComponent("default.store")
+        let candidates = [
+            base,
+            URL(fileURLWithPath: base.path + "-wal"),
+            URL(fileURLWithPath: base.path + "-shm"),
+        ]
+        let timestamp = Int(Date().timeIntervalSince1970)
+        do {
+            for url in candidates where fileManager.fileExists(atPath: url.path) {
+                let backup = URL(fileURLWithPath: url.path + ".corrupt-\(timestamp)")
+                try fileManager.moveItem(at: url, to: backup)
+            }
+            return try ModelContainer(for: AppSchema.schema)
+        } catch {
+            Log.persistence.error("恢复数据存储失败: \(error.localizedDescription, privacy: .public)")
+            return nil
+        }
     }
 }

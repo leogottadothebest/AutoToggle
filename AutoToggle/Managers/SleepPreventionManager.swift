@@ -50,6 +50,8 @@ struct IOPMAssertionProvider: PowerAssertionProviding {
 final class SleepPreventionManager {
     private let assertionProvider: any PowerAssertionProviding
     private weak var logManager: LogManager?
+    /// 注入的 UserDefaults（测试传 suiteName 隔离）
+    private let defaults: UserDefaults
 
     /// 是否防止系统休眠
     private(set) var isPreventingSystemSleep: Bool
@@ -64,12 +66,16 @@ final class SleepPreventionManager {
     private static let systemSleepKey = "preventSystemSleep"
     private static let displaySleepKey = "preventDisplaySleep"
 
-    init(assertionProvider: any PowerAssertionProviding = IOPMAssertionProvider()) {
+    init(
+        assertionProvider: any PowerAssertionProviding = IOPMAssertionProvider(),
+        defaults: UserDefaults = .standard
+    ) {
         self.assertionProvider = assertionProvider
+        self.defaults = defaults
 
         // 恢复持久化的开启态（跨启动保持）
-        let systemEnabled = UserDefaults.standard.bool(forKey: Self.systemSleepKey)
-        let displayEnabled = UserDefaults.standard.bool(forKey: Self.displaySleepKey)
+        let systemEnabled = defaults.bool(forKey: Self.systemSleepKey)
+        let displayEnabled = defaults.bool(forKey: Self.displaySleepKey)
 
         if systemEnabled {
             systemSleepAssertionID = assertionProvider.createAssertion(
@@ -97,7 +103,7 @@ final class SleepPreventionManager {
     func setSystemSleepPrevention(_ enabled: Bool) {
         guard enabled != isPreventingSystemSleep else { return }
         isPreventingSystemSleep = enabled
-        UserDefaults.standard.set(enabled, forKey: Self.systemSleepKey)
+        defaults.set(enabled, forKey: Self.systemSleepKey)
 
         if enabled {
             systemSleepAssertionID = assertionProvider.createAssertion(
@@ -119,7 +125,7 @@ final class SleepPreventionManager {
     func setDisplaySleepPrevention(_ enabled: Bool) {
         guard enabled != isPreventingDisplaySleep else { return }
         isPreventingDisplaySleep = enabled
-        UserDefaults.standard.set(enabled, forKey: Self.displaySleepKey)
+        defaults.set(enabled, forKey: Self.displaySleepKey)
 
         if enabled {
             displaySleepAssertionID = assertionProvider.createAssertion(

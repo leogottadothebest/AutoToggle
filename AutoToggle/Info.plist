@@ -16,8 +16,10 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>26.0</string>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2026 leogottadothebest. All rights reserved.</string>
 	<key>NSAppleEventsUsageDescription</key>

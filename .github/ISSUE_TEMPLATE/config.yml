@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 常见问题
+    url: https://github.com/leogottadothebest/AutoToggle#-faq--troubleshooting
+    about: 先查看 README 的 FAQ / 故障排查

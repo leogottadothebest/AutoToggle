@@ -84,12 +84,13 @@ final class IdleDetectorManager {
             }
         }
 
-        // 每 30 秒检查一次
+        // 每 30 秒检查一次；加 5s 容差让系统可合并定时器、降低能耗（不涉及分钟级调度精度）
         timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
             Task { @MainActor [weak self] in
                 self?.checkIdleState()
             }
         }
+        timer?.tolerance = 5.0
     }
 
     /// 停止闲置检测

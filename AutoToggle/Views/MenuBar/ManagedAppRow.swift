@@ -51,11 +51,13 @@ struct ManagedAppRow: View {
                 }
                 .buttonStyle(.plain)
                 .help(Text(String(localized: "row.quitApp \(app.displayName)")))
+                .accessibilityLabel(Text(String(localized: "row.quitApp \(app.displayName)")))
             }
             .padding(.horizontal)
             .padding(.vertical, 8)
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - 子视图

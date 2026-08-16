@@ -1,0 +1,2 @@
+/* Apple Events usage description (English localization) */
+"NSAppleEventsUsageDescription" = "AutoToggle needs to send Apple Events to automatically quit and hide apps.";

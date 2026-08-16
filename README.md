@@ -4,8 +4,8 @@
 
 [English](README.md) · [中文](README.zh-CN.md)
 
-[![Platform](https://img.shields.io/badge/platform-macOS%2026.0%2B-blue)](https://developer.apple.com/macos/)
-[![Architecture](https://img.shields.io/badge/arch-Apple%20Silicon%20only-orange)](#)
+[![Platform](https://img.shields.io/badge/platform-macOS%2014.0%2B-blue)](https://developer.apple.com/macos/)
+[![Architecture](https://img.shields.io/badge/arch-Universal%20(Intel%20%2B%20Apple%20Silicon)-orange)](#)
 [![Swift](https://img.shields.io/badge/swift-6.0-orange)](https://swift.org)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -28,7 +28,7 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 ### Download from GitHub Release
 
 1. Go to the [Releases](https://github.com/leogottadothebest/AutoToggle/releases) page
-2. Download the latest `.dmg` file (e.g. `AutoToggle-1.2.0.dmg`)
+2. Download the latest `.dmg` file (e.g. `AutoToggle-1.3.0.dmg`)
 3. Open the DMG and drag AutoToggle into the Applications folder
 4. On first launch, right-click AutoToggle.app → **Open** to bypass Gatekeeper
 5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection) — you can also manage it later in **Settings → Permissions**.
@@ -49,13 +49,13 @@ scripts/bootstrap-signing.sh
 # Generate the Xcode project
 xcodegen generate
 
-# Build (Release)
-xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Release build
+# Build (Release) — uses scripts/build.sh (unlocks the signing keychain, runs xcodegen, builds, verifies)
+scripts/build.sh
 
-# The app is in the DerivedData directory
+# The app is in build/DerivedData/Build/Products/Release/AutoToggle.app
 ```
 
-**Requirements**: Xcode 26.0+, macOS 26.0+
+**Requirements**: Xcode 26.0+, macOS 14.0+
 
 ## 🎯 Usage
 
@@ -87,7 +87,7 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 
 ```
 AutoToggle/
-├── AutoToggleApp.swift         # @main entry (App scene + MenuBarExtra)
+├── AutoToggleApp.swift         # @main entry (empty App scene; window + menu bar created in AppKit)
 ├── AppDelegate.swift           # native NSWindow + NSHostingView main window
 ├── AppDependencies.swift       # @MainActor centralized dependency injection
 ├── Info.plist / AutoToggle.entitlements
@@ -129,6 +129,23 @@ AutoToggle/
 - [ ] Shortcuts integration
 - [ ] App usage statistics
 - [ ] Rule template marketplace
+
+## ❓ FAQ / Troubleshooting
+
+**"AutoToggle can't be opened because it's from an unidentified developer"**
+This is expected for a self-signed (un-notarized) build. On first launch, **right-click AutoToggle.app → Open** to bypass Gatekeeper. You can also verify the DMG's SHA-256 (the `.sha256` file ships alongside each Release) and then run `xattr -dr com.apple.quarantine /Applications/AutoToggle.app` to clear the flag permanently.
+
+**Accessibility is granted in System Settings, but the app still says "not authorized"**
+macOS caches the permission for the running process. Grant it, then **restart AutoToggle**. If it still doesn't stick, run `tccutil reset Accessibility com.autotoggle.app`, then remove and re-add AutoToggle under System Settings → Privacy & Security → Accessibility.
+
+**Why was an app quit automatically?**
+An idle rule fired: the app was idle longer than its configured threshold, so it was quit/hidden. Disable or delete the corresponding idle rule in the Apps tab.
+
+**Why won't a target app quit?**
+The three-tier fallback (AppleScript → terminate → forceTerminate) can fail if the target app is showing a modal like "Save changes?", or if AutoToggle lacks Automation permission. Dismiss the dialog, and confirm AutoToggle is allowed to control the app under System Settings → Privacy & Security → Automation.
+
+**I'm on 1.2.0 — how do I upgrade to 1.3.0?**
+The 1.x offline line has no auto-update. Download `AutoToggle-1.3.0.dmg` from the Releases page and reinstall manually.
 
 ## 📄 License
 

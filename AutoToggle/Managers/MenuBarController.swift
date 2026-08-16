@@ -30,6 +30,7 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
         if let button = item.button {
             button.image = NSImage(named: "MenuBarIcon")
             button.image?.isTemplate = true
+            button.setAccessibilityLabel("AutoToggle")
             button.target = self
             button.action = #selector(togglePopover)
         }

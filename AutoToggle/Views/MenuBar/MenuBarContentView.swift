@@ -115,6 +115,7 @@ struct MenuBarContentView: View {
             }
             .buttonStyle(.borderless)
             .help(sleepPreventionManager.isPreventingSystemSleep ? "关闭防系统休眠" : "开启防系统休眠")
+            .accessibilityLabel(sleepPreventionManager.isPreventingSystemSleep ? "关闭防系统休眠" : "开启防系统休眠")
 
             // 暂停/恢复按钮
             Button(action: { menuBarManager.togglePause() }) {
@@ -123,6 +124,7 @@ struct MenuBarContentView: View {
             }
             .buttonStyle(.borderless)
             .help(menuBarManager.isPaused ? "恢复规则执行" : "暂停所有规则")
+            .accessibilityLabel(menuBarManager.isPaused ? "恢复规则执行" : "暂停所有规则")
 
             // 关闭/退出按钮（主色，与灰色功能按钮区分，更醒目）
             Button(action: { menuBarManager.quitApp() }) {
@@ -131,6 +133,7 @@ struct MenuBarContentView: View {
             }
             .buttonStyle(.borderless)
             .help("退出 AutoToggle")
+            .accessibilityLabel("退出 AutoToggle")
         }
         .padding(.horizontal)
         .padding(.vertical, 10)
@@ -188,6 +191,7 @@ struct MenuBarContentView: View {
                             .toggleStyle(.switch)
                             .controlSize(.mini)
                             .labelsHidden()
+                            .accessibilityLabel(item.appName)
                         }
                         .padding(.horizontal)
                         .padding(.vertical, 4)

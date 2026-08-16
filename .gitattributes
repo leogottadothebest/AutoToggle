@@ -1,0 +1,11 @@
+# 二进制文件
+*.dmg binary
+*.png binary
+*.icns binary
+*.zip binary
+
+# 内部 / 本机特定文件：git archive 发行导出时排除
+SYNC.md export-ignore
+RELEASE.md export-ignore
+.claude/ export-ignore
+app图标.png export-ignore
