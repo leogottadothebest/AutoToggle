@@ -19,7 +19,7 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 - **📋 Menu bar icon + main window** — the main window opens on launch to manage rules and logs; closing the window hides the app from the Dock (it keeps running in the menu bar), and the menu bar icon is an always-on quick entry
 - **🔌 Launch at login** — start automatically on sign-in, no manual steps
 - **🔒 Privacy-first** — all data is stored locally, with no network requests and no data upload
-- **🇨🇳 Native Chinese** — full Chinese UI, optimized for WeChat / DingTalk / Feishu and other domestic apps
+- **🇨🇳 Bilingual (Chinese / English)** — full Chinese UI plus a complete English translation, switchable in **Settings → Language** (a restart applies the change)
 - **🔍 Smart app picker** — scans every app including Utilities, sorts by UI language (pinyin for Chinese, A–Z for English), with a clickable letter index and auto-focused search
 - **⏰ Menu bar scheduled tasks** — upcoming scheduled launches/quits are shown right beside the managed apps; disabled tasks stay listed and can be toggled from the switch on the right
 
@@ -28,7 +28,7 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 ### Download from GitHub Release
 
 1. Go to the [Releases](https://github.com/leogottadothebest/AutoToggle/releases) page
-2. Download the latest `.dmg` file (e.g. `AutoToggle-1.1.0.dmg`)
+2. Download the latest `.dmg` file (e.g. `AutoToggle-1.2.0.dmg`)
 3. Open the DMG and drag AutoToggle into the Applications folder
 4. On first launch, right-click AutoToggle.app → **Open** to bypass Gatekeeper
 5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection) — you can also manage it later in **Settings → Permissions**.
@@ -110,7 +110,7 @@ AutoToggle/
 │   ├── MenuBar/                # menu bar panel
 │   ├── Settings/               # rule editing components
 │   └── Onboarding/             # permission onboarding
-├── Utilities/                  # helpers (BundleHelper / AppIconProvider / AppSortHelper)
+├── Utilities/                  # helpers (BundleHelper / AppIconProvider / AppSortHelper / LanguageManager)
 └── Resources/                  # Assets.xcassets / Localizable.xcstrings
 ```
 

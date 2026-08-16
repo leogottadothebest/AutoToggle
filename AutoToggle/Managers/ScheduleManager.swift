@@ -143,17 +143,17 @@ final class ScheduleManager {
         let action: String
         switch rule.ruleType {
         case .scheduledLaunch:
-            action = "定时启动"
+            action = String(localized: "ruleType.scheduledLaunch")
             appActionManager.launchApp(bundleID: rule.appBundleID)
         case .scheduledQuit:
-            action = "定时退出"
+            action = String(localized: "ruleType.scheduledQuit")
             appActionManager.terminateApp(bundleID: rule.appBundleID, strategy: rule.quitStrategy)
         case .idleQuit, .idleHide:
             return // 闲置规则由 IdleDetectorManager 处理
         }
 
         logManager.addActivity(
-            message: "\(action): \(rule.appName)",
+            message: String(localized: "log.action \(action) \(rule.appName)"),
             relatedAppName: rule.appName
         )
     }

@@ -10,10 +10,12 @@ struct TimeTriggerPicker: View {
     var isQuitType: Bool = false
 
     /// 星期选项（1=周日 ... 7=周六）
-    private let weekdays: [(Int, String)] = [
-        (1, "周日"), (2, "周一"), (3, "周二"), (4, "周三"),
-        (5, "周四"), (6, "周五"), (7, "周六"),
-    ]
+    private var weekdays: [(Int, String)] {
+        [
+            (1, String(localized: "周日")), (2, String(localized: "周一")), (3, String(localized: "周二")), (4, String(localized: "周三")),
+            (5, String(localized: "周四")), (6, String(localized: "周五")), (7, String(localized: "周六")),
+        ]
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -71,9 +73,9 @@ struct TimeTriggerPicker: View {
 
                 // 快捷选择
                 HStack(spacing: 8) {
-                    quickButton("每天", weekdays: Set(1...7))
-                    quickButton("工作日", weekdays: Set(2...6))
-                    quickButton("周末", weekdays: Set([1, 7]))
+                    quickButton(String(localized: "每天"), weekdays: Set(1...7))
+                    quickButton(String(localized: "工作日"), weekdays: Set(2...6))
+                    quickButton(String(localized: "周末"), weekdays: Set([1, 7]))
                 }
             }
 

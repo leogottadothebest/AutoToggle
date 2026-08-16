@@ -122,7 +122,7 @@ struct IdleTriggerPicker: View {
                 .multilineTextAlignment(.trailing)
                 .labelsHidden()
 
-            Text("分钟")
+            Text(String(localized: "unit.minutes"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -139,12 +139,12 @@ struct IdleTriggerPicker: View {
     /// 格式化分钟数为可读文本
     private func formatMinutes(_ minutes: Int) -> String {
         if minutes < 60 {
-            return "\(minutes) 分钟"
+            return String(localized: "time.minutes \(minutes)")
         }
         let hours = minutes / 60
         let remaining = minutes % 60
         if remaining == 0 {
-            return "\(hours) 小时"
+            return String(localized: "time.hours \(hours)")
         }
         return "\(hours)h\(remaining)m"
     }
@@ -153,9 +153,9 @@ struct IdleTriggerPicker: View {
     private var scopeExplanation: String {
         switch trigger.scope {
         case .app:
-            return "目标应用未处于前台达指定时长后触发。"
+            return String(localized: "idle.scope.appHint")
         case .system:
-            return "整个系统无键盘/鼠标输入达指定时长后触发（全局闲置，例如离开电脑时）。"
+            return String(localized: "idle.scope.systemHint")
         }
     }
 }

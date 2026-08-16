@@ -48,7 +48,7 @@ final class AppMonitorManager {
 
             Task { @MainActor [weak self] in
                 guard let self, let bundleID else { return }
-                let info = AppInfo(bundleID: bundleID, displayName: name ?? "未知应用", appPath: path)
+                let info = AppInfo(bundleID: bundleID, displayName: name ?? String(localized: "未知应用"), appPath: path)
                 if !self.runningApps.contains(where: { $0.bundleID == info.bundleID }) {
                     self.runningApps.append(info)
                 }
@@ -86,7 +86,7 @@ final class AppMonitorManager {
 
             Task { @MainActor [weak self] in
                 guard let self, let bundleID else { return }
-                self.frontmostApp = AppInfo(bundleID: bundleID, displayName: name ?? "未知应用", appPath: path)
+                self.frontmostApp = AppInfo(bundleID: bundleID, displayName: name ?? String(localized: "未知应用"), appPath: path)
                 self.onFrontmostAppChanged?(bundleID)
             }
         }
@@ -109,7 +109,7 @@ final class AppMonitorManager {
             .map { app in
                 AppInfo(
                     bundleID: app.bundleIdentifier ?? "unknown",
-                    displayName: app.localizedName ?? "未知应用",
+                    displayName: app.localizedName ?? String(localized: "未知应用"),
                     appPath: app.bundleURL?.path
                 )
             }

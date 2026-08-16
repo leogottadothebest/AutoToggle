@@ -74,13 +74,13 @@ final class SleepPreventionManager {
         if systemEnabled {
             systemSleepAssertionID = assertionProvider.createAssertion(
                 type: .systemSleep,
-                reason: "AutoToggle 防止系统休眠"
+                reason: String(localized: "AutoToggle 防止系统休眠")
             )
         }
         if displayEnabled {
             displaySleepAssertionID = assertionProvider.createAssertion(
                 type: .displaySleep,
-                reason: "AutoToggle 防止显示器休眠"
+                reason: String(localized: "AutoToggle 防止显示器休眠")
             )
         }
 
@@ -102,14 +102,17 @@ final class SleepPreventionManager {
         if enabled {
             systemSleepAssertionID = assertionProvider.createAssertion(
                 type: .systemSleep,
-                reason: "AutoToggle 防止系统休眠"
+                reason: String(localized: "AutoToggle 防止系统休眠")
             )
         } else if let id = systemSleepAssertionID {
             assertionProvider.releaseAssertion(id)
             systemSleepAssertionID = nil
         }
 
-        logManager?.addSystem(message: enabled ? "已开启防系统休眠" : "已关闭防系统休眠", level: .info)
+        logManager?.addSystem(
+            message: enabled ? String(localized: "log.sleepOn") : String(localized: "log.sleepOff"),
+            level: .info
+        )
     }
 
     /// 设置「防止显示器关闭」开关
@@ -121,14 +124,17 @@ final class SleepPreventionManager {
         if enabled {
             displaySleepAssertionID = assertionProvider.createAssertion(
                 type: .displaySleep,
-                reason: "AutoToggle 防止显示器休眠"
+                reason: String(localized: "AutoToggle 防止显示器休眠")
             )
         } else if let id = displaySleepAssertionID {
             assertionProvider.releaseAssertion(id)
             displaySleepAssertionID = nil
         }
 
-        logManager?.addSystem(message: enabled ? "已开启防显示器关闭" : "已关闭防显示器关闭", level: .info)
+        logManager?.addSystem(
+            message: enabled ? String(localized: "log.displayOn") : String(localized: "log.displayOff"),
+            level: .info
+        )
     }
 
     /// 快捷切换「防止系统休眠」（供菜单栏/总览卡片）

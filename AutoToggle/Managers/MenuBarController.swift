@@ -53,14 +53,23 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
             .environment(dependencies.permissionManager)
             .environment(dependencies.sleepPreventionManager)
             .frame(width: 300)
-            .background(.windowBackground)
+            // 不叠加不透明背景：让 NSPopover 自身的材质（含顶部箭头）完整透出，
+            // 避免箭头颜色与面板主体色不一致。外观由 NSApp.appearance + popover.appearance 驱动。
     }
 
     private func setupPopover() {
         popover.behavior = .transient
         popover.animates = false
+        popover.appearance = popoverAppearance
         popover.contentViewController = NSHostingController(rootView: contentView)
         popover.delegate = self
+    }
+
+    /// 依据当前生效外观返回 NSPopover 外观（箭头/边框跟随同一套浅深色方案）
+    private var popoverAppearance: NSAppearance? {
+        dependencies.appearanceManager.effectiveColorScheme == .dark
+            ? NSAppearance(named: .darkAqua)
+            : NSAppearance(named: .aqua)
     }
 
     @objc private func togglePopover() {
@@ -68,6 +77,8 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
         if popover.isShown {
             popover.performClose(nil)
         } else {
+            // 每次展开前刷新外观，覆盖用户在主窗口里刚切换了浅/深色的场景
+            popover.appearance = popoverAppearance
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
         }
     }

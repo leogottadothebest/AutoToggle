@@ -39,6 +39,7 @@
 		A8A41EF557ABDA070B421BF2 /* IdleTriggerPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D97F3A5AAE03726D5DE416 /* IdleTriggerPicker.swift */; };
 		A94D6CAF5A608C0B0E1BAD3B /* AppActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A48974E32605E601CF7CE4 /* AppActionManager.swift */; };
 		AB48EDE9EDE0B363D71B35B0 /* SleepPreventionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910AF087E5DFED60D689296D /* SleepPreventionManager.swift */; };
+		AE341AAA2F4A13E8F9E01299 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ABF4345B57170F7B0261C7 /* LanguageManager.swift */; };
 		BA0D19387202CDC37029BAE6 /* TimeTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665F9759F426D901A107C5C3 /* TimeTrigger.swift */; };
 		BC291338C7FC9F6B2BA63A97 /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B180C6DE0819157A44D92245 /* LogManager.swift */; };
 		C0B1C3B31F97BCE6DA4FB024 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4C4C6E1DE2DA6233CA09A6A /* Assets.xcassets */; };
@@ -89,6 +90,7 @@
 		4BDC0F7450240A551E8A6E0F /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		4F7FDF9DC1BFCB2295B6C668 /* SystemIdleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemIdleProvider.swift; sourceTree = "<group>"; };
 		4F858C27609C1D292EA95976 /* IdleDetectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDetectorManager.swift; sourceTree = "<group>"; };
+		56ABF4345B57170F7B0261C7 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		5A5A72F92173E21CB22E41C8 /* ProfileRenameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRenameTests.swift; sourceTree = "<group>"; };
 		665F9759F426D901A107C5C3 /* TimeTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTrigger.swift; sourceTree = "<group>"; };
 		6EC574AF9EFFC13C26F02B6A /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				F85800472F5E674F01D19C75 /* AppIconProvider.swift */,
 				481F9327F99C28DC024E504A /* AppSortHelper.swift */,
 				2EFC1D2899308A9716AAFC72 /* BundleHelper.swift */,
+				56ABF4345B57170F7B0261C7 /* LanguageManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -412,6 +415,7 @@
 				578BA4C3E391901FF64AF600 /* IdleDetectorManager.swift in Sources */,
 				A8A41EF557ABDA070B421BF2 /* IdleTriggerPicker.swift in Sources */,
 				9384E1112B9D438BBEBB5AC9 /* InlineRuleEditor.swift in Sources */,
+				AE341AAA2F4A13E8F9E01299 /* LanguageManager.swift in Sources */,
 				6F1A0FDBDA7DDDB94C1E36E4 /* LogEntry.swift in Sources */,
 				BC291338C7FC9F6B2BA63A97 /* LogManager.swift in Sources */,
 				F65F2BA19D7B464ED724A0F0 /* LogsTab.swift in Sources */,
@@ -496,7 +500,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -510,7 +514,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 leogottadothebest. All rights reserved.";
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -634,7 +638,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -654,7 +658,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 leogottadothebest. All rights reserved.";
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

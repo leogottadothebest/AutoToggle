@@ -34,12 +34,11 @@ struct LogsTab: View {
                 Text("系统日志").tag(LogCategory.system)
             }
             .pickerStyle(.segmented)
-            .frame(width: 200)
 
             Spacer()
 
             // 日志条数
-            Text("\(entries.count) 条记录")
+            Text(String(localized: "log.entryCount \(entries.count)"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -60,8 +59,15 @@ struct LogsTab: View {
                 clearCurrentLogs()
             }
         } message: {
-            Text("确定要清除所有「\(selectedCategory == .activity ? "活动" : "系统")」日志吗？此操作不可撤销。")
+            Text(String(localized: "log.clearConfirm \(currentCategoryName)"))
         }
+    }
+
+    /// 当前分类的本地化名称
+    private var currentCategoryName: String {
+        selectedCategory == .activity
+            ? String(localized: "log.category.activity")
+            : String(localized: "log.category.system")
     }
 
     // MARK: - 日志列表
@@ -88,7 +94,9 @@ struct LogsTab: View {
                 .font(.system(size: 36))
                 .foregroundStyle(.secondary)
 
-            Text("暂无\(selectedCategory == .activity ? "活动" : "系统")日志")
+            Text(selectedCategory == .activity
+                 ? String(localized: "log.noActivity")
+                 : String(localized: "log.noSystem"))
                 .font(.body)
                 .foregroundStyle(.secondary)
         }

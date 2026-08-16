@@ -27,7 +27,7 @@ struct ManagedAppRow: View {
 
                     // 闲置状态指示
                     if let idleState, idleState.isIdle {
-                        Text("闲置 \(formatIdleTime(idleState.idleSeconds))")
+                        Text(String(localized: "row.idleFor \(formatIdleTime(idleState.idleSeconds))"))
                             .font(.caption)
                             .foregroundStyle(.orange)
                     } else if let idleState, !idleState.isActive {
@@ -50,7 +50,7 @@ struct ManagedAppRow: View {
                         .font(.title3)
                 }
                 .buttonStyle(.plain)
-                .help("退出 \(app.displayName)")
+                .help(Text(String(localized: "row.quitApp \(app.displayName)")))
             }
             .padding(.horizontal)
             .padding(.vertical, 8)
@@ -82,13 +82,13 @@ struct ManagedAppRow: View {
     private func formatIdleTime(_ seconds: TimeInterval) -> String {
         let minutes = Int(seconds / 60)
         if minutes < 60 {
-            return "\(minutes)分钟"
+            return String(localized: "time.minutesShort \(minutes)")
         }
         let hours = minutes / 60
         let remainingMinutes = minutes % 60
         if remainingMinutes == 0 {
-            return "\(hours)小时"
+            return String(localized: "time.hoursShort \(hours)")
         }
-        return "\(hours)小时\(remainingMinutes)分钟"
+        return String(localized: "time.hoursMinutesShort \(hours) \(remainingMinutes)")
     }
 }

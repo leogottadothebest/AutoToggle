@@ -24,7 +24,7 @@ final class ProfileManager {
 
         // 如果没有方案，自动创建默认方案
         if profiles.isEmpty {
-            let defaultProfile = createProfile(name: "配置1", setActive: true)
+            let defaultProfile = createProfile(name: String(localized: "profile.defaultName"), setActive: true)
             activeProfile = defaultProfile
         } else if activeProfile == nil {
             // 有方案但没有活跃的，激活第一个
@@ -115,7 +115,7 @@ final class ProfileManager {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
         panel.nameFieldStringValue = "\(profile.name).autotoggle.json"
-        panel.message = "选择保存位置"
+        panel.message = String(localized: "选择保存位置")
 
         guard let window = NSApp.keyWindow ?? NSApp.windows.first else { return }
 
@@ -213,7 +213,7 @@ final class ProfileManager {
         panel.allowedContentTypes = [.json]
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
-        panel.message = "选择 AutoToggle 配置方案文件"
+        panel.message = String(localized: "选择 AutoToggle 配置方案文件")
 
         guard let window = NSApp.keyWindow ?? NSApp.windows.first else { return }
 

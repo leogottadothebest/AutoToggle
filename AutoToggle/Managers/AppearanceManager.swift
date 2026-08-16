@@ -56,10 +56,14 @@ final class AppearanceManager {
     func applyMode() {
         switch selectedMode {
         case .light:
+            NSApp.appearance = NSAppearance(named: .aqua)
             effectiveColorScheme = .light
         case .dark:
+            NSApp.appearance = NSAppearance(named: .darkAqua)
             effectiveColorScheme = .dark
         case .system:
+            // 先清空应用级外观再读取系统外观，避免读到上一次强制模式残留的值
+            NSApp.appearance = nil
             effectiveColorScheme = Self.currentSystemColorScheme
         }
     }

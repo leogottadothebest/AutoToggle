@@ -230,17 +230,17 @@ final class IdleDetectorManager {
         let action: String
         switch rule.ruleType {
         case .idleQuit:
-            action = "闲置退出"
+            action = String(localized: "ruleType.idleQuit")
             actionManager.terminateApp(bundleID: rule.appBundleID, strategy: rule.quitStrategy)
         case .idleHide:
-            action = "闲置隐藏"
+            action = String(localized: "ruleType.idleHide")
             actionManager.hideApp(bundleID: rule.appBundleID)
         default:
             return
         }
 
         logManager?.addActivity(
-            message: "\(action): \(rule.appName)",
+            message: String(localized: "log.action \(action) \(rule.appName)"),
             relatedAppName: rule.appName
         )
     }

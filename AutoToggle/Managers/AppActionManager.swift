@@ -35,7 +35,7 @@ final class AppActionManager {
     /// - Parameter bundleID: 目标应用的 Bundle Identifier
     func launchApp(bundleID: String) {
         guard BundleHelper.isValidBundleID(bundleID) else {
-            logManager?.addSystem(message: "拒绝启动非法 Bundle ID（疑似注入）: \(bundleID)", level: .error)
+            logManager?.addSystem(message: String(localized: "log.rejectLaunch \(bundleID)"), level: .error)
             return
         }
         guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else {
@@ -49,6 +49,7 @@ final class AppActionManager {
             return
         }
 
+        let displayName = BundleHelper.displayName(for: appURL.path) ?? bundleID
         let configuration = NSWorkspace.OpenConfiguration()
         configuration.activates = true
 
@@ -57,18 +58,12 @@ final class AppActionManager {
                 print("[AppActionManager] 启动应用失败 \(bundleID): \(error.localizedDescription)")
                 Task { @MainActor in
                     self?.logManager?.addSystem(
-                        message: "启动失败: \(BundleHelper.displayName(for: appURL.path) ?? bundleID) - \(error.localizedDescription)",
+                        message: String(localized: "log.launchFailed \(displayName) \(error.localizedDescription)"),
                         level: .error
                     )
                 }
-            } else {
-                Task { @MainActor in
-                    self?.logManager?.addActivity(
-                        message: "启动应用: \(BundleHelper.displayName(for: appURL.path) ?? bundleID)",
-                        relatedAppName: BundleHelper.displayName(for: appURL.path)
-                    )
-                }
             }
+            // 成功启动不在此记活动日志：由触发方（定时启动）或菜单栏手动操作单独记录，避免重复
         }
     }
 
@@ -80,7 +75,7 @@ final class AppActionManager {
     ///   - strategy: 退出策略（普通 = 仅 AppleScript，强制 = 三级降级）
     func terminateApp(bundleID: String, strategy: QuitStrategy = .normal) {
         guard BundleHelper.isValidBundleID(bundleID) else {
-            logManager?.addSystem(message: "拒绝退出非法 Bundle ID（疑似注入）: \(bundleID)", level: .error)
+            logManager?.addSystem(message: String(localized: "log.rejectQuit \(bundleID)"), level: .error)
             return
         }
         guard let runningApp = findRunningApp(bundleID: bundleID) else {
@@ -93,14 +88,14 @@ final class AppActionManager {
         let scriptSuccess = attemptGracefulQuitViaAppleScript(bundleID: bundleID)
 
         if scriptSuccess {
-            logManager?.addActivity(message: "退出应用: \(appName)", relatedAppName: appName)
+            // 不在活动日志重复记录：触发方（闲置退出/定时退出）已记录语义化条目，手动退出由菜单栏记录
             return
         }
 
         // 普通退出模式：AppleScript 失败则记录警告并停止
         guard strategy == .force else {
             logManager?.addSystem(
-                message: "\(appName) 普通退出失败（应用不支持 AppleScript quit），已跳过",
+                message: String(localized: "log.normalQuitFailed \(appName)"),
                 level: .warning
             )
             return
@@ -114,7 +109,7 @@ final class AppActionManager {
               current.processIdentifier == runningApp.processIdentifier else {
             return
         }
-        let terminateSuccess = current.terminate()
+        _ = current.terminate()
 
         // 给 terminate 3 秒时间生效
         Task {
@@ -122,11 +117,7 @@ final class AppActionManager {
             // LOW-4 修复：重新按 bundleID 查找当前实例，避免陈旧 PID 被复用导致误杀（CWE-362）
             guard let current = findRunningApp(bundleID: bundleID), !current.isTerminated else { return }
             attemptForceTerminate(current)
-            logManager?.addSystem(message: "强制退出: \(appName) (forceTerminate)", level: .warning)
-        }
-
-        if terminateSuccess {
-            logManager?.addActivity(message: "退出应用: \(appName)", relatedAppName: appName)
+            logManager?.addSystem(message: String(localized: "log.forceQuit \(appName)"), level: .warning)
         }
     }
 
@@ -134,7 +125,7 @@ final class AppActionManager {
     /// - Parameter bundleID: 目标应用的 Bundle Identifier
     func hideApp(bundleID: String) {
         guard BundleHelper.isValidBundleID(bundleID) else {
-            logManager?.addSystem(message: "拒绝隐藏非法 Bundle ID（疑似注入）: \(bundleID)", level: .error)
+            logManager?.addSystem(message: String(localized: "log.rejectHide \(bundleID)"), level: .error)
             return
         }
         guard findRunningApp(bundleID: bundleID) != nil else { return }
@@ -158,7 +149,7 @@ final class AppActionManager {
     /// - Parameter bundleID: 目标应用的 Bundle Identifier
     func activateApp(bundleID: String) {
         guard BundleHelper.isValidBundleID(bundleID) else {
-            logManager?.addSystem(message: "拒绝激活非法 Bundle ID（疑似注入）: \(bundleID)", level: .error)
+            logManager?.addSystem(message: String(localized: "log.rejectActivate \(bundleID)"), level: .error)
             return
         }
         guard let runningApp = findRunningApp(bundleID: bundleID) else {

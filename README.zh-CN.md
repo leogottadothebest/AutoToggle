@@ -19,7 +19,7 @@ AutoToggle 是一款轻量级 macOS 菜单栏应用，通过自定义规则**自
 - **📋 菜单栏图标 + 主窗口** — 主窗口启动即打开，集中管理规则与日志；关闭窗口后应用从 Dock 消失（继续驻留菜单栏），菜单栏图标作为常驻快速入口
 - **🔌 开机自启** — 登录时自动启动，无需手动操作
 - **🔒 隐私优先** — 所有数据存储在本地，无网络请求，无数据上传
-- **🇨🇳 中文原生** — 全中文界面，对微信/钉钉/飞书等国内应用优化
+- **🇨🇳 中英双语** — 完整中文界面 + 全量英文翻译，可在「设置 → 语言」切换（重启应用后生效）
 - **🔍 智能应用选择器** — 完整扫描含实用工具在内的所有应用，按界面语言排序（中文按拼音、英文按字母），支持点击字母表快速导航
 - **⏰ 菜单栏显示定时任务** — 即将触发的定时启动/退出与被管理应用并列展示；已关闭的定时任务仍显示，可在右侧开关一键切换
 
@@ -28,7 +28,7 @@ AutoToggle 是一款轻量级 macOS 菜单栏应用，通过自定义规则**自
 ### 从 GitHub Release 下载
 
 1. 前往 [Releases](https://github.com/leogottadothebest/AutoToggle/releases) 页面
-2. 下载最新的 `.dmg` 文件（如 `AutoToggle-1.1.0.dmg`）
+2. 下载最新的 `.dmg` 文件（如 `AutoToggle-1.2.0.dmg`）
 3. 打开 DMG，将 AutoToggle 拖入「应用程序」文件夹
 4. 首次启动时，右键点击 AutoToggle.app →「打开」以绕过 Gatekeeper
 5. 根据引导授予「辅助功能」权限（可选，用于更精确的闲置检测），之后也可在「设置 → 权限」中查看或重新请求。
@@ -110,7 +110,7 @@ AutoToggle/
 │   ├── MenuBar/                # 菜单栏面板
 │   ├── Settings/               # 规则编辑组件
 │   └── Onboarding/             # 权限引导
-├── Utilities/                  # 工具类（BundleHelper / AppIconProvider / AppSortHelper）
+├── Utilities/                  # 工具类（BundleHelper / AppIconProvider / AppSortHelper / LanguageManager）
 └── Resources/                  # Assets.xcassets / Localizable.xcstrings
 ```
 

@@ -83,8 +83,10 @@ struct OverviewTab: View {
             }
 
             StatusCard(
-                title: "防睡眠",
-                value: sleepPreventionManager.isPreventingSystemSleep ? "已开启" : "已关闭",
+                title: String(localized: "card.sleepPrevention"),
+                value: sleepPreventionManager.isPreventingSystemSleep
+                    ? String(localized: "status.on")
+                    : String(localized: "status.off"),
                 systemImage: sleepPreventionManager.isPreventingSystemSleep ? "moon.zzz.fill" : "moon.zzz",
                 color: sleepPreventionManager.isPreventingSystemSleep ? .green : .secondary
             ) {

@@ -60,7 +60,7 @@ final class AppDependencies {
             idle?.markAppActive(bundleID)
         }
 
-        logs.addSystem(message: "AutoToggle 启动完成", level: .info)
+        logs.addSystem(message: String(localized: "AutoToggle 启动完成"), level: .info)
         logs.enforceRetentionPolicy()
 
         appActionManager = action

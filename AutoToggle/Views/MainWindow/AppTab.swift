@@ -70,7 +70,7 @@ struct AppTab: View {
             }
         } message: {
             if let profile = profileToDelete {
-                Text("确定要删除配置方案「\(profile.name)」吗？其中的所有规则将被永久删除。此操作不可撤销。")
+                Text(String(localized: "profile.deleteConfirm \(profile.name)"))
             }
         }
     }
@@ -97,7 +97,7 @@ struct AppTab: View {
                 HStack(spacing: 4) {
                     Image(systemName: "square.grid.2x2")
                         .font(.subheadline)
-                    Text(profileManager.activeProfile?.name ?? "配置1")
+                    Text(profileManager.activeProfile?.name ?? String(localized: "profile.defaultName"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                     Image(systemName: "chevron.down")
@@ -114,8 +114,10 @@ struct AppTab: View {
 
             // 新建方案
             Button {
-                let existingCount = profileManager.profiles.filter { $0.name.hasPrefix("配置") }.count
-                let newName = "配置\(existingCount + 1)"
+                let existingCount = profileManager.profiles.filter {
+                    $0.name.hasPrefix("配置") || $0.name.hasPrefix("Profile")
+                }.count
+                let newName = String(localized: "profile.autoName \(existingCount + 1)")
                 profileManager.createProfile(name: newName, setActive: false)
             } label: {
                 Label("新建", systemImage: "plus")
@@ -193,7 +195,7 @@ struct AppTab: View {
 
             Spacer()
 
-            Text("\(profileManager.activeProfile?.rules?.count ?? 0) 条规则")
+            Text(String(localized: "ruleCount \(profileManager.activeProfile?.rules?.count ?? 0)"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -297,7 +299,7 @@ struct AppTab: View {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 32))
                 .foregroundStyle(.secondary)
-            Text("未找到匹配「\(searchText)」的规则")
+            Text(String(localized: "search.noRulesMatch \(searchText)"))
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

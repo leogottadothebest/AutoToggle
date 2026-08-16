@@ -69,27 +69,31 @@ final class AppRule {
         case .scheduledLaunch:
             if let tt = timeTrigger {
                 let weekdayStr = formatWeekdays(tt.weekdays)
-                return "\(weekdayStr) \(String(format: "%02d:%02d", tt.hour, tt.minute)) 启动"
+                return String(localized: "short.scheduledLaunch \(weekdayStr) \(String(format: "%02d:%02d", tt.hour, tt.minute))")
             }
-            return "定时启动"
+            return String(localized: "ruleType.scheduledLaunch")
         case .scheduledQuit:
             if let tt = timeTrigger {
                 let weekdayStr = formatWeekdays(tt.weekdays)
-                return "\(weekdayStr) \(String(format: "%02d:%02d", tt.hour, tt.minute)) 退出"
+                return String(localized: "short.scheduledQuit \(weekdayStr) \(String(format: "%02d:%02d", tt.hour, tt.minute))")
             }
-            return "定时退出"
+            return String(localized: "ruleType.scheduledQuit")
         case .idleQuit:
             if let it = idleTrigger {
-                let scope = it.scope == .system ? "系统闲置" : "闲置"
-                return "\(scope) \(it.idleMinutes) 分钟后退出"
+                let scope = it.scope == .system
+                    ? String(localized: "scope.systemIdle")
+                    : String(localized: "scope.idle")
+                return String(localized: "short.idleQuit \(scope) \(it.idleMinutes)")
             }
-            return "闲置后退出"
+            return String(localized: "ruleType.idleQuit")
         case .idleHide:
             if let it = idleTrigger {
-                let scope = it.scope == .system ? "系统闲置" : "闲置"
-                return "\(scope) \(it.idleMinutes) 分钟后隐藏"
+                let scope = it.scope == .system
+                    ? String(localized: "scope.systemIdle")
+                    : String(localized: "scope.idle")
+                return String(localized: "short.idleHide \(scope) \(it.idleMinutes)")
             }
-            return "闲置后隐藏"
+            return String(localized: "ruleType.idleHide")
         }
     }
 
@@ -119,13 +123,13 @@ final class AppRule {
 
     private func formatWeekdays(_ weekdays: Set<Int>) -> String {
         if weekdays.count == 7 || weekdays.isEmpty {
-            return "每天"
+            return String(localized: "每天")
         }
         if weekdays == Set([2, 3, 4, 5, 6]) {
-            return "工作日"
+            return String(localized: "工作日")
         }
         if weekdays == Set([1, 7]) {
-            return "周末"
+            return String(localized: "周末")
         }
         let sorted = weekdays.sorted()
         let names = sorted.compactMap { shortWeekdayName($0) }
@@ -133,10 +137,15 @@ final class AppRule {
     }
 
     private func shortWeekdayName(_ day: Int) -> String? {
-        let map: [Int: String] = [
-            1: "周日", 2: "周一", 3: "周二", 4: "周三",
-            5: "周四", 6: "周五", 7: "周六"
-        ]
-        return map[day]
+        switch day {
+        case 1: return String(localized: "周日")
+        case 2: return String(localized: "周一")
+        case 3: return String(localized: "周二")
+        case 4: return String(localized: "周三")
+        case 5: return String(localized: "周四")
+        case 6: return String(localized: "周五")
+        case 7: return String(localized: "周六")
+        default: return nil
+        }
     }
 }

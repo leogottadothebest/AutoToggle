@@ -16,6 +16,7 @@ struct MenuBarContentView: View {
     @Environment(AppActionManager.self) private var appActionManager
     @Environment(ProfileManager.self) private var profileManager
     @Environment(SleepPreventionManager.self) private var sleepPreventionManager
+    @Environment(LogManager.self) private var logManager
 
     // MARK: - State
 
@@ -90,7 +91,7 @@ struct MenuBarContentView: View {
                         }
                     }
                 } label: {
-                    Text(profileManager.activeProfile?.name ?? "配置1")
+                    Text(profileManager.activeProfile?.name ?? String(localized: "profile.defaultName"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -123,10 +124,10 @@ struct MenuBarContentView: View {
             .buttonStyle(.borderless)
             .help(menuBarManager.isPaused ? "恢复规则执行" : "暂停所有规则")
 
-            // 关闭/退出按钮
+            // 关闭/退出按钮（主色，与灰色功能按钮区分，更醒目）
             Button(action: { menuBarManager.quitApp() }) {
                 Image(systemName: "power")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
             }
             .buttonStyle(.borderless)
             .help("退出 AutoToggle")
@@ -229,7 +230,14 @@ struct MenuBarContentView: View {
                         ManagedAppRow(
                             app: app,
                             idleState: idleDetectorManager.idleState(for: app.bundleID),
-                            onQuit: { appActionManager.terminateApp(bundleID: app.bundleID) },
+                            onQuit: {
+                                // 手动退出单独记一条活动日志（触发型退出由闲置/定时管理器记录，避免重复）
+                                logManager.addActivity(
+                                    message: String(localized: "log.quitApp \(app.displayName)"),
+                                    relatedAppName: app.displayName
+                                )
+                                appActionManager.terminateApp(bundleID: app.bundleID)
+                            },
                             onActivate: { appActionManager.activateApp(bundleID: app.bundleID) }
                         )
 
@@ -270,10 +278,10 @@ struct MenuBarContentView: View {
         let timeString = time.string(from: date)
 
         if Calendar.current.isDateInToday(date) {
-            return "今天 \(timeString)"
+            return String(localized: "time.today \(timeString)")
         }
         if Calendar.current.isDateInTomorrow(date) {
-            return "明天 \(timeString)"
+            return String(localized: "time.tomorrow \(timeString)")
         }
 
         let full = DateFormatter()

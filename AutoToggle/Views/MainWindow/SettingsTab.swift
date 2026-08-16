@@ -188,6 +188,8 @@ struct SettingsTab: View {
                 }
                 .pickerStyle(.segmented)
                 .onChange(of: appLanguage) { _, _ in
+                    // 立即写入 AppleLanguages，确保重启（或异常退出）后仍按新语言解析
+                    LanguageManager.apply(appLanguage)
                     // 语言切换需要重启应用才能完全生效
                     showRestartPrompt = true
                 }
@@ -317,35 +319,37 @@ struct SettingsTab: View {
 
     /// 应用版本号（读取 Info.plist 的 CFBundleShortVersionString，避免与工程定义脱节）
     private var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.1.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.2.0"
     }
 
     // MARK: - 时区
 
     /// 常见时区（标识 + 显示名）
-    private static let commonTimeZones: [(String, String)] = [
-        ("Asia/Shanghai", "北京 / 上海"),
-        ("Asia/Hong_Kong", "香港"),
-        ("Asia/Taipei", "台北"),
-        ("Asia/Singapore", "新加坡"),
-        ("Asia/Tokyo", "东京"),
-        ("Asia/Seoul", "首尔"),
-        ("Asia/Bangkok", "曼谷"),
-        ("Asia/Kolkata", "新德里"),
-        ("Asia/Dubai", "迪拜"),
-        ("Europe/Moscow", "莫斯科"),
-        ("Europe/Paris", "巴黎"),
-        ("Europe/Berlin", "柏林"),
-        ("Europe/London", "伦敦"),
-        ("Africa/Cairo", "开罗"),
-        ("America/New_York", "纽约"),
-        ("America/Chicago", "芝加哥"),
-        ("America/Denver", "丹佛"),
-        ("America/Los_Angeles", "洛杉矶"),
-        ("America/Sao_Paulo", "圣保罗"),
-        ("Pacific/Auckland", "奥克兰"),
-        ("Pacific/Honolulu", "檀香山"),
-    ]
+    private static var commonTimeZones: [(String, String)] {
+        [
+            ("Asia/Shanghai", String(localized: "北京 / 上海")),
+            ("Asia/Hong_Kong", String(localized: "香港")),
+            ("Asia/Taipei", String(localized: "台北")),
+            ("Asia/Singapore", String(localized: "新加坡")),
+            ("Asia/Tokyo", String(localized: "东京")),
+            ("Asia/Seoul", String(localized: "首尔")),
+            ("Asia/Bangkok", String(localized: "曼谷")),
+            ("Asia/Kolkata", String(localized: "新德里")),
+            ("Asia/Dubai", String(localized: "迪拜")),
+            ("Europe/Moscow", String(localized: "莫斯科")),
+            ("Europe/Paris", String(localized: "巴黎")),
+            ("Europe/Berlin", String(localized: "柏林")),
+            ("Europe/London", String(localized: "伦敦")),
+            ("Africa/Cairo", String(localized: "开罗")),
+            ("America/New_York", String(localized: "纽约")),
+            ("America/Chicago", String(localized: "芝加哥")),
+            ("America/Denver", String(localized: "丹佛")),
+            ("America/Los_Angeles", String(localized: "洛杉矶")),
+            ("America/Sao_Paulo", String(localized: "圣保罗")),
+            ("Pacific/Auckland", String(localized: "奥克兰")),
+            ("Pacific/Honolulu", String(localized: "檀香山")),
+        ]
+    }
 
     /// 时区显示名（附当前 UTC 偏移，DST 时自动变化）
     private func timeZoneLabel(identifier: String, name: String) -> String {
@@ -356,7 +360,7 @@ struct SettingsTab: View {
         let hours = absSeconds / 3600
         let minutes = (absSeconds % 3600) / 60
         let offset = minutes == 0 ? "\(sign)\(hours)" : "\(sign)\(hours):\(String(format: "%02d", minutes))"
-        return "\(name)（GMT\(offset)）"
+        return String(localized: "timezone.offsetLabel \(name) \(offset)")
     }
 
     // MARK: - 开机自启

@@ -12,6 +12,9 @@ struct AutoToggleApp: App {
     private let dependencies: AppDependencies
 
     init() {
+        // 在任何本地化查找之前应用所选语言（需早于 AppDependencies 创建，因其日志/断言已含本地化文案）
+        LanguageManager.applyStoredLanguage()
+
         let dependencies = AppDependencies()
         self.dependencies = dependencies
         appDelegate.dependencies = dependencies

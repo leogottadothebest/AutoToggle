@@ -47,7 +47,7 @@ final class RuleManager {
         }
         modelContext.insert(rule)
         saveChanges()
-        logManager?.addSystem(message: "添加规则: \(rule.shortDescription) - \(rule.appName)")
+        logManager?.addSystem(message: String(localized: "log.addRule \(rule.shortDescription) \(rule.appName)"))
     }
 
     /// 更新现有规则
@@ -61,7 +61,7 @@ final class RuleManager {
         let name = rule.appName
         modelContext.delete(rule)
         saveChanges()
-        logManager?.addSystem(message: "删除规则: \(desc) - \(name)")
+        logManager?.addSystem(message: String(localized: "log.deleteRule \(desc) \(name)"))
     }
 
     /// 切换规则启用/禁用
