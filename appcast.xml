@@ -3,12 +3,25 @@
     <channel>
         <title>AutoToggle</title>
         <item>
+            <title>2.1.0</title>
+            <pubDate>Sun, 16 Aug 2026 23:22:54 +0800</pubDate>
+            <link>https://github.com/leogottadothebest/AutoToggle</link>
+            <sparkle:phasedRolloutInterval>86400</sparkle:phasedRolloutInterval>
+            <sparkle:version>7</sparkle:version>
+            <sparkle:shortVersionString>2.1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.1.0/AutoToggle-2.1.0.dmg" length="4291156" type="application/octet-stream" sparkle:edSignature="pJr1bnnt3NdkbFNZO6vvnDp7IjyXBkHYVxgx7hme5zQoN0o1PHe0IKy2DmZmyNpNKgEqMpycROn/lwBLrIL0Dw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.1.0/AutoToggle7-4.delta" sparkle:deltaFrom="4" length="684018" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977712" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zbunT5c2hYC735/IPvvOKAAiCZza5JT9Q5z3xwl/xTVvDGzvz3Z9d78KHJXs25S71ODUCBaIM8Z84D++BRGDBQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.0.0</title>
             <pubDate>Sun, 16 Aug 2026 18:17:27 +0800</pubDate>
             <sparkle:version>4</sparkle:version>
             <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.0.0/AutoToggle-2.0.0.dmg" length="3248718" type="application/octet-stream" sparkle:edSignature="nabmGJs3uXtDJH8Tz2qoZW3GvsZE9/Km85eSx2ZXZklt0rFSrbAdhzwU1wemM20oqmOWMHcNa9qkmioInbPWAQ=="/>
+            <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.1.0/AutoToggle-2.0.0.dmg" length="3248718" type="application/octet-stream" sparkle:edSignature="nabmGJs3uXtDJH8Tz2qoZW3GvsZE9/Km85eSx2ZXZklt0rFSrbAdhzwU1wemM20oqmOWMHcNa9qkmioInbPWAQ=="/>
         </item>
     </channel>
 </rss>
