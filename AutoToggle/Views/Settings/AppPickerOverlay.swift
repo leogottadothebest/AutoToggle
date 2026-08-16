@@ -213,7 +213,7 @@ struct AppPickerOverlay: View {
 
             Spacer()
 
-            Text(String(localized: "appPicker.count \(allApps.count)"))
+            Text("^[\(allApps.count) 个应用](inflect: true)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 

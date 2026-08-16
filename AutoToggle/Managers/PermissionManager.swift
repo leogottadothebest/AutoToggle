@@ -89,12 +89,26 @@ final class PermissionManager {
     /// 启动周期性刷新：每 3 秒重新查询一次 AXIsProcessTrusted()。
     /// 应用切换为 .accessory（菜单栏模式）后，didBecomeActive 可能不再可靠触发，
     /// 这里用轻量定时重查兜底，确保权限状态在用户授权后能及时更新。
+    /// 授权完成后由 refresh() 停止（见 stopPeriodicRefresh），避免常驻轮询耗电。
     private func startPeriodicRefresh() {
         refreshTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 self?.refresh()
             }
         }
+        refreshTimer?.tolerance = 0.5
+    }
+
+    /// 停止周期轮询（权限已授予后调用，节能）
+    private func stopPeriodicRefresh() {
+        refreshTimer?.invalidate()
+        refreshTimer = nil
+    }
+
+    /// 确保轮询在运行（未授权时调用，持续检测外部授权变化）
+    private func ensurePeriodicRefreshRunning() {
+        guard refreshTimer == nil else { return }
+        startPeriodicRefresh()
     }
 
     /// 刷新权限状态（例如用户从系统设置返回后）
@@ -102,10 +116,15 @@ final class PermissionManager {
         let granted = trustProvider.isTrusted()
         if granted != accessibilityGranted {
             accessibilityGranted = granted
-            NSLog("[PermissionManager] 辅助功能权限状态变化: %@", granted ? "已授权" : "未授权")
+            Log.permission.info("辅助功能权限状态变化: \(granted ? "已授权" : "未授权", privacy: .public)")
         }
         if granted {
             needsRestartToApplyAccessibility = false
+            // 已授权：停止常驻轮询，后续靠 didBecomeActive/分布式通知重查
+            stopPeriodicRefresh()
+        } else {
+            // 未授权：保持轮询，持续检测用户是否在系统设置里授予权限
+            ensurePeriodicRefreshRunning()
         }
 
         // 未授权时输出一次可操作的诊断（指出是否 ad-hoc 签名这个常见根因），授权后复位
@@ -151,11 +170,11 @@ final class PermissionManager {
     private func logDeniedDiagnostic() {
         switch CodeSigningDiagnostics.isAdHocSigned(bundleURL: Bundle.main.bundleURL) {
         case true:
-            NSLog("[PermissionManager] ⚠️ 未授权辅助功能，且当前为 ad-hoc 签名——每次重建 cdhash 都变，系统设置里的授权会失效。请改用稳定证书签名后重新授权。")
+            Log.permission.warning("未授权辅助功能，且当前为 ad-hoc 签名——每次重建 cdhash 都变，系统设置里的授权会失效。请改用稳定证书签名后重新授权。")
         case false:
-            NSLog("[PermissionManager] 未授权辅助功能（已用稳定证书签名）。若系统设置已开启授权仍无效，请移除并重新添加 AutoToggle 后重启应用。")
+            Log.permission.warning("未授权辅助功能（已用稳定证书签名）。若系统设置已开启授权仍无效，请移除并重新添加 AutoToggle 后重启应用。")
         case nil:
-            NSLog("[PermissionManager] 未授权辅助功能，且无法读取当前签名信息。")
+            Log.permission.warning("未授权辅助功能，且无法读取当前签名信息。")
         }
     }
 
@@ -193,7 +212,7 @@ final class PermissionManager {
         // 需要重启才能生效——给出提示（用户也可能未真正授权，措辞用「若」以免误导）。
         if returningFromSettings && !accessibilityGranted {
             needsRestartToApplyAccessibility = true
-            NSLog("[PermissionManager] 从系统设置返回后仍未授权，提示重启应用以应用授权")
+            Log.permission.notice("从系统设置返回后仍未授权，提示重启应用以应用授权")
         }
     }
 }

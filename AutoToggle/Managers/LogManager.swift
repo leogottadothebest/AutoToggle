@@ -166,7 +166,7 @@ final class LogManager {
         do {
             try modelContext.save()
         } catch {
-            NSLog("[LogManager] 保存日志失败: %@", error.localizedDescription)
+            Log.persistence.error("保存日志失败: \(error.localizedDescription, privacy: .public)")
         }
     }
 }

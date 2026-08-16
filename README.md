@@ -4,8 +4,8 @@
 
 [English](README.md) · [中文](README.zh-CN.md)
 
-[![Platform](https://img.shields.io/badge/platform-macOS%2026.0%2B-blue)](https://developer.apple.com/macos/)
-[![Architecture](https://img.shields.io/badge/arch-Apple%20Silicon%20only-orange)](#)
+[![Platform](https://img.shields.io/badge/platform-macOS%2014.0%2B-blue)](https://developer.apple.com/macos/)
+[![Architecture](https://img.shields.io/badge/arch-Universal%20(Intel%20%2B%20Apple%20Silicon)-orange)](#)
 [![Swift](https://img.shields.io/badge/swift-6.0-orange)](https://swift.org)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -23,19 +23,20 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 - **🔍 Smart app picker** — scans every app including Utilities, sorts by UI language (pinyin for Chinese, A–Z for English), with a clickable letter index and auto-focused search
 - **⏰ Menu bar scheduled tasks** — upcoming scheduled launches/quits are shown right beside the managed apps; disabled tasks stay listed and can be toggled from the switch on the right
 - **🔄 Auto-update** — built-in Sparkle 2 updater: checks on launch and via **Settings → About → Check for Updates…** (automatic checks can be toggled off); new versions download and install automatically
+- **⌨️ Global hotkey** — press **⌥⌘P** anywhere to pause/resume all rules (requires Accessibility permission)
 
 ## 📥 Installation
 
 ### Download from GitHub Release
 
 > ⚖️ **Version choice** — this project ships two release lines:
-> - **1.2.0 and earlier**: offline stable builds — no network access, no auto-update, the most secure option;
-> - **2.0.0 onwards**: built-in Sparkle auto-update that periodically checks for new versions over the network (auto-check can be disabled in Settings).
+> - **1.x (e.g. 1.3.0)**: offline stable builds — no network access, no auto-update, the most secure option;
+> - **2.x (e.g. 2.1.0)**: built-in Sparkle auto-update that periodically checks for new versions over the network (auto-check can be disabled in Settings).
 >
-> Choose 1.2.0 for a fully offline environment, or 2.0.0+ for automatic updates.
+> Choose 1.x for a fully offline environment, or 2.x for automatic updates.
 
 1. Go to the [Releases](https://github.com/leogottadothebest/AutoToggle/releases) page
-2. Download a `.dmg` file (e.g. `AutoToggle-2.0.0.dmg`)
+2. Download a `.dmg` file (e.g. `AutoToggle-2.1.0.dmg`)
 3. Open the DMG and drag AutoToggle into the Applications folder
 4. On first launch, right-click AutoToggle.app → **Open** to bypass Gatekeeper
 5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection) — you can also manage it later in **Settings → Permissions**.
@@ -66,7 +67,7 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 
 > The first build downloads the Sparkle updater framework via Swift Package Manager (network required once).
 
-**Requirements**: Xcode 26.0+, macOS 26.0+
+**Requirements**: Xcode 26.0+, macOS 14.0+
 
 ## 🎯 Usage
 
@@ -93,6 +94,28 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 - **Enable / Disable**: toggle the switch directly in the rule list
 - **Edit**: double-click a rule row
 - **Delete**: swipe left on a rule row, or delete from the edit screen
+
+## ❓ FAQ / Troubleshooting
+
+**"AutoToggle" can't be opened because it can't be verified**
+
+AutoToggle is signed with a self-signed certificate (not Apple-notarized). On first launch, right-click the app → **Open**, or run `xattr -dr com.apple.quarantine /Applications/AutoToggle.app`. You can verify the download integrity against the SHA-256 checksum (the `.sha256` file on the release page).
+
+**Accessibility is granted but the app still shows "not authorized"**
+
+macOS caches the grant for a running process. Restart AutoToggle. If it still fails, run `tccutil reset Accessibility com.autotoggle.app`, re-grant it in System Settings, then restart again.
+
+**Why did my app get quit or hidden?**
+
+An idle rule fired. Check **Settings → Logs** for an "idle quit"/"idle hide" entry. Apps that are playing audio or in a call are protected by fake-idle detection.
+
+**Why won't my app quit?**
+
+AutoToggle quits apps in three tiers (AppleScript → terminate → force). A first-launch "unsaved changes" dialog can block the graceful path. Check Logs to see which tier was used.
+
+**My app doesn't appear in the picker**
+
+The picker scans `/Applications`, `/Applications/Utilities`, and `/System/Applications`. Apps installed elsewhere are not indexed.
 
 ## 🏗️ Architecture
 
@@ -144,7 +167,9 @@ AutoToggle/
 
 ## 📄 License
 
-MIT License © 2026 leogottadothebest
+MIT License © 2026 AutoToggle contributors
+
+[Privacy Policy](PRIVACY.md) · [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md)
 
 ---
 

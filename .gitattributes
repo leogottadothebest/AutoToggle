@@ -1,0 +1,13 @@
+# 二进制文件标记
+*.dmg binary
+*.png binary
+*.icns binary
+*.jpg binary
+*.gif binary
+*.mov binary
+
+# 内部文件不随 git archive 导出（公开仓库经 SYNC.md 的 rsync 清单另行控制）
+SYNC.md export-ignore
+RELEASE.md export-ignore
+.claude/ export-ignore
+*.profraw export-ignore

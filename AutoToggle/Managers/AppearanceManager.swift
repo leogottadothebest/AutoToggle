@@ -14,12 +14,15 @@ final class AppearanceManager {
         didSet {
             guard oldValue != selectedMode else { return }
             applyMode()
-            UserDefaults.standard.set(selectedMode.rawValue, forKey: "appAppearance")
+            defaults.set(selectedMode.rawValue, forKey: "appAppearance")
         }
     }
 
     /// 当前生效的实际 ColorScheme（.light 或 .dark，从不为 nil）
     private(set) var effectiveColorScheme: ColorScheme = .light
+
+    /// 注入的 UserDefaults（测试传 suiteName 隔离）
+    private let defaults: UserDefaults
 
     // MARK: - 模式枚举
 
@@ -36,8 +39,9 @@ final class AppearanceManager {
 
     // MARK: - 初始化
 
-    init() {
-        let stored = UserDefaults.standard.string(forKey: "appAppearance") ?? "system"
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        let stored = defaults.string(forKey: "appAppearance") ?? "system"
         let mode = AppearanceMode(rawValue: stored) ?? .system
         // 直接设置存储属性（绕过 didSet，避免初始化时访问 NSApp）
         selectedMode = mode

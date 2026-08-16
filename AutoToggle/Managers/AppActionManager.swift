@@ -24,9 +24,17 @@ final class AppActionManager {
     /// 日志管理器引用（可选注入）
     private weak var logManager: LogManager?
 
+    /// 系统控制抽象（默认真实实现，测试注入 fake）
+    private var controller: any AppControlling = NSWorkspaceAppController()
+
     /// 注入日志管理器
     func configure(logManager: LogManager) {
         self.logManager = logManager
+    }
+
+    /// 注入应用控制实现（测试用）
+    func configure(controller: any AppControlling) {
+        self.controller = controller
     }
 
     // MARK: - 启动应用
@@ -38,8 +46,9 @@ final class AppActionManager {
             logManager?.addSystem(message: String(localized: "log.rejectLaunch \(bundleID)"), level: .error)
             return
         }
-        guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else {
-            print("[AppActionManager] 找不到应用: \(bundleID)")
+        guard let appURL = controller.urlForApplication(bundleID: bundleID) else {
+            Log.appAction.warning("找不到应用: \(bundleID, privacy: .public)")
+            logManager?.addSystem(message: String(localized: "log.launchNotFound \(bundleID)"), level: .error)
             return
         }
 
@@ -53,12 +62,15 @@ final class AppActionManager {
         let configuration = NSWorkspace.OpenConfiguration()
         configuration.activates = true
 
-        NSWorkspace.shared.openApplication(at: appURL, configuration: configuration) { [weak self] _, error in
+        controller.openApplication(at: appURL, configuration: configuration) { _, error in
             if let error {
-                print("[AppActionManager] 启动应用失败 \(bundleID): \(error.localizedDescription)")
-                Task { @MainActor in
+                let detail = error.localizedDescription
+                Log.appAction.error("启动应用失败 \(bundleID, privacy: .public): \(detail, privacy: .public)")
+                // 闭包为 @Sendable，不能在外部作用域捕获非 Sendable 的 self；
+                // 这里只捕获 Sendable 值，再跳回 MainActor 访问 self。
+                Task { @MainActor [weak self] in
                     self?.logManager?.addSystem(
-                        message: String(localized: "log.launchFailed \(displayName) \(error.localizedDescription)"),
+                        message: String(localized: "log.launchFailed \(displayName) \(detail)"),
                         level: .error
                     )
                 }
@@ -78,16 +90,16 @@ final class AppActionManager {
             logManager?.addSystem(message: String(localized: "log.rejectQuit \(bundleID)"), level: .error)
             return
         }
-        guard let runningApp = findRunningApp(bundleID: bundleID) else {
+        guard let runningApp = controller.runningApp(bundleID: bundleID) else {
             return
         }
 
         let appName = runningApp.localizedName ?? bundleID
 
         // 第一级：AppleScript 优雅退出
-        let scriptSuccess = attemptGracefulQuitViaAppleScript(bundleID: bundleID)
+        let scriptResult = controller.executeAppleScript(quitScript(bundleID: bundleID))
 
-        if scriptSuccess {
+        if scriptResult.success {
             // 不在活动日志重复记录：触发方（闲置退出/定时退出）已记录语义化条目，手动退出由菜单栏记录
             return
         }
@@ -105,18 +117,22 @@ final class AppActionManager {
         // L-4：AppleScript 优雅退出可能已让应用真正退出、但脚本仍返回错误，此时 runningApp
         // 是陈旧快照（其 PID 可能已被系统复用给其它进程）。先按 bundleID 重新解析并校验
         // PID 未变，避免 terminate() 误杀同用户的无关进程（CWE-362）。
-        guard let current = findRunningApp(bundleID: bundleID),
+        guard let current = controller.runningApp(bundleID: bundleID),
               current.processIdentifier == runningApp.processIdentifier else {
             return
         }
+        let terminatedPID = current.processIdentifier
         _ = current.terminate()
 
         // 给 terminate 3 秒时间生效
         Task {
             try? await Task.sleep(for: .seconds(3))
-            // LOW-4 修复：重新按 bundleID 查找当前实例，避免陈旧 PID 被复用导致误杀（CWE-362）
-            guard let current = findRunningApp(bundleID: bundleID), !current.isTerminated else { return }
-            attemptForceTerminate(current)
+            // LOW-4 修复：重新按 bundleID 查找并校验 PID 未变，再 forceTerminate，
+            // 避免 3 秒窗口内 PID 被复用（如用户重新打开同款应用）导致误杀无关实例（CWE-362）。
+            guard let current = controller.runningApp(bundleID: bundleID),
+                  current.processIdentifier == terminatedPID,
+                  !current.isTerminated else { return }
+            current.forceTerminate()
             logManager?.addSystem(message: String(localized: "log.forceQuit \(appName)"), level: .warning)
         }
     }
@@ -128,7 +144,7 @@ final class AppActionManager {
             logManager?.addSystem(message: String(localized: "log.rejectHide \(bundleID)"), level: .error)
             return
         }
-        guard findRunningApp(bundleID: bundleID) != nil else { return }
+        guard controller.runningApp(bundleID: bundleID) != nil else { return }
 
         let script = """
         tell application id "\(bundleID)"
@@ -136,12 +152,10 @@ final class AppActionManager {
         end tell
         """
 
-        if let appleScript = NSAppleScript(source: script) {
-            var error: NSDictionary?
-            appleScript.executeAndReturnError(&error)
-            if let error {
-                print("[AppActionManager] 隐藏应用失败 \(bundleID): \(error)")
-            }
+        let result = controller.executeAppleScript(script)
+        if let error = result.error {
+            Log.appAction.warning("隐藏应用失败 \(bundleID, privacy: .public): \(error, privacy: .public)")
+            logManager?.addSystem(message: String(localized: "log.hideFailed \(bundleID)"), level: .warning)
         }
     }
 
@@ -152,7 +166,7 @@ final class AppActionManager {
             logManager?.addSystem(message: String(localized: "log.rejectActivate \(bundleID)"), level: .error)
             return
         }
-        guard let runningApp = findRunningApp(bundleID: bundleID) else {
+        guard let runningApp = controller.runningApp(bundleID: bundleID) else {
             launchApp(bundleID: bundleID)
             return
         }
@@ -163,45 +177,17 @@ final class AppActionManager {
 
     /// 检查应用是否在运行
     func isAppRunning(bundleID: String) -> Bool {
-        findRunningApp(bundleID: bundleID) != nil
+        controller.runningApp(bundleID: bundleID) != nil
     }
 
     // MARK: - 内部方法
 
-    /// 查找运行中的应用实例
-    private func findRunningApp(bundleID: String) -> NSRunningApplication? {
-        NSWorkspace.shared.runningApplications.first { $0.bundleIdentifier == bundleID }
-    }
-
-    /// 第一级：AppleScript 优雅退出（同步执行，quit 命令通常瞬间完成）
-    private func attemptGracefulQuitViaAppleScript(bundleID: String) -> Bool {
-        // 纵深防御：即使上层漏过，这里也拒绝任何可能破坏 AppleScript 字符串的 Bundle ID
-        guard BundleHelper.isValidBundleID(bundleID) else { return false }
-
-        let script = """
+    /// 构造 AppleScript 优雅退出脚本（调用前必须已通过 bundleID 校验，防注入）
+    private func quitScript(bundleID: String) -> String {
+        """
         tell application id "\(bundleID)"
             quit
         end tell
         """
-
-        guard let appleScript = NSAppleScript(source: script) else {
-            return false
-        }
-
-        var error: NSDictionary?
-        appleScript.executeAndReturnError(&error)
-
-        if let error {
-            print("[AppActionManager] AppleScript 退出失败 \(bundleID): \(error)")
-            return false
-        }
-
-        return true
-    }
-
-    /// 第三级：强制终止（系统安全 API，框架内部校验 PID 归属，替代裸 kill()）
-    private func attemptForceTerminate(_ runningApp: NSRunningApplication) {
-        print("[AppActionManager] 强制终止: \(runningApp.localizedName ?? "未知应用") (PID \(runningApp.processIdentifier))")
-        _ = runningApp.forceTerminate()
     }
 }

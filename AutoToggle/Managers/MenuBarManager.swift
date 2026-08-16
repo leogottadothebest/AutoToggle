@@ -14,12 +14,19 @@ final class MenuBarManager {
     /// 活跃规则数量
     var activeRuleCount: Int = 0
 
+    /// 注入的 UserDefaults（测试传 suiteName 隔离）
+    private let defaults: UserDefaults
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
+
     // MARK: - 公开方法
 
     /// 切换暂停状态
     func togglePause() {
         isPaused.toggle()
-        UserDefaults.standard.set(isPaused, forKey: "isPaused")
+        defaults.set(isPaused, forKey: "isPaused")
     }
 
     /// 更新菜单栏统计数据

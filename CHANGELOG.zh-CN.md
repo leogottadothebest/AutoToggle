@@ -4,6 +4,30 @@
 
 本文件记录 AutoToggle 每个版本的重要变更。格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循[语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [Unreleased]
+
+## [2.1.0] - 2026-08-16
+
+### 新增
+
+- 最低系统要求降至 macOS 14.0，并改为通用二进制（Intel + Apple Silicon）
+- 新增 CI（GitHub Actions：构建、单元测试、Lint、覆盖率）、共享 Xcode scheme，以及含 build/test/lint/format 入口的 Makefile
+- 新增开发工具链：SwiftLint + SwiftFormat 配置、`.editorconfig`、钉版工具链（`Brewfile`/`Mintfile`/`.swift-version`）
+- 新增社区与治理文件：`SECURITY.md`、`CONTRIBUTING.md`、`CODE_OF_CONDUCT.md`、Issue/PR 模板、`THIRD_PARTY_LICENSES.md`，以及 `PRIVACY.md` 隐私政策
+- 为菜单栏与主窗口补充 VoiceOver/键盘无障碍标签，并新增应用内「导出诊断…」功能
+- 新增全局快捷键（⌥⌘P 暂停/恢复）、本地崩溃日志查看、UI 测试、性能基线与 SBOM
+- 补齐剩余英文翻译，并为规则/日志计数添加复数形式
+
+### 变更
+
+- 开发者日志统一改用 `os.Logger`，移除 Release 代码中的裸 `print()`
+- 授权完成后停止常驻的 3 秒辅助功能轮询（节能）
+- Sparkle appcast 现包含发布说明、分阶段推送与产品链接
+
+### 安全
+
+- 新增 SwiftData 版本化 Schema 脚手架与首启损坏 store 恢复路径，防止未来模型变更导致数据丢失
+
 ## [2.0.0] - 2026-08-16
 
 ### 新增
@@ -68,3 +92,10 @@
 
 - 启用 Hardened Runtime 与最小化授权
 - 导入配置文件增加大小与字段范围校验
+
+[Unreleased]: https://github.com/leogottadothebest/AutoToggle/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/leogottadothebest/AutoToggle/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/leogottadothebest/AutoToggle/compare/v1.2.0...v2.0.0
+[1.2.0]: https://github.com/leogottadothebest/AutoToggle/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/leogottadothebest/AutoToggle/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/leogottadothebest/AutoToggle/releases/tag/v1.0.0

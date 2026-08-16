@@ -90,6 +90,8 @@ final class IdleDetectorManager {
                 self?.checkIdleState()
             }
         }
+        // 允许系统合并唤醒（±5s），降低菜单栏常驻应用的能耗
+        timer?.tolerance = 5.0
     }
 
     /// 停止闲置检测

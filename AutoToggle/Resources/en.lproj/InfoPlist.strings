@@ -1,0 +1,2 @@
+/* Apple Events 自动化权限说明（英文） */
+"NSAppleEventsUsageDescription" = "AutoToggle needs to send Apple Events to automatically quit and hide managed apps.";

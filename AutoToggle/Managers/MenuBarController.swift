@@ -32,6 +32,8 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
             button.image?.isTemplate = true
             button.target = self
             button.action = #selector(togglePopover)
+            button.setAccessibilityLabel("AutoToggle")
+            button.setAccessibilityTitle("AutoToggle 菜单栏")
         }
         statusItem = item
     }

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "regexManagers": [
+    {
+      "fileMatch": ["^project\\.yml$"],
+      "matchStrings": ["exactVersion:\\s*['\"]?(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)['\"]?"],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "sparkle-project/Sparkle",
+      "versioningTemplate": "semver"
+    }
+  ]
+}

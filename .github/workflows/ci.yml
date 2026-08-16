@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-lint:
+    name: Build + Test + Lint
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Cache SPM & DerivedData
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData
+            ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('project.yml', 'AutoToggle.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      # Release 签名门禁（verify-signing.sh）无法在 CI 跑（自签名证书在本地钥匙串），
+      # 这里只做其可 CI 化的子集：Hardened Runtime 必须在工程定义中保持开启。
+      - name: Verify Hardened Runtime stays enabled
+        run: grep -q 'ENABLE_HARDENED_RUNTIME: YES' project.yml
+
+      - name: Lint (SwiftLint)
+        run: |
+          brew install swiftlint
+          swiftlint --config .swiftlint.yml
+
+      - name: Build & Unit Test
+        run: |
+          xcodebuild -project AutoToggle.xcodeproj \
+            -scheme AutoToggle \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -enableCodeCoverage YES \
+            -resultBundlePath build/TestResults.xcresult \
+            test
+
+      - name: Print coverage summary
+        run: |
+          xcrun xccov view --report build/TestResults.xcresult 2>/dev/null | tail -30 || true

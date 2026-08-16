@@ -34,11 +34,21 @@ else
 fi
 
 echo "▶ 构建 Release（签名身份: $IDENTITY）"
+# -destination 'generic/platform=macOS' 强制构建全部 ARCHS（arm64 + x86_64 通用二进制）。
+# 不带 destination 时 xcodebuild 默认以当前机器架构为目标（等效 ONLY_ACTIVE_ARCH=YES），只产 arm64。
 xcodebuild -project AutoToggle.xcodeproj \
   -scheme AutoToggle \
   -configuration Release \
+  -destination 'generic/platform=macOS' \
   build \
   -derivedDataPath build/DerivedData
+
+echo "▶ 通用二进制门禁（部署目标 macOS 14.0，须含 x86_64 切片）"
+APP_BIN="build/DerivedData/Build/Products/Release/AutoToggle.app/Contents/MacOS/AutoToggle"
+if ! lipo -archs "$APP_BIN" 2>/dev/null | grep -q "x86_64"; then
+  echo "❌ 构建产物缺少 x86_64 切片（非通用二进制）。检查 project.yml 的 ARCHS。" >&2
+  exit 1
+fi
 
 echo "▶ 校验签名门禁 (verify-signing.sh)"
 ./scripts/verify-signing.sh "build/DerivedData/Build/Products/Release/AutoToggle.app"

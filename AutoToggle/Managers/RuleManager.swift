@@ -104,7 +104,7 @@ final class RuleManager {
             try modelContext.save()
             refreshRules()
         } catch {
-            NSLog("[RuleManager] 保存规则失败: %@", error.localizedDescription)
+            Log.persistence.error("保存规则失败: \(error.localizedDescription, privacy: .public)")
         }
     }
 }

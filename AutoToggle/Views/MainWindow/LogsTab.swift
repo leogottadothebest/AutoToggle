@@ -4,6 +4,7 @@ import SwiftUI
 /// 支持活动日志和系统日志的切换和浏览
 struct LogsTab: View {
     @Environment(LogManager.self) private var logManager
+    @Environment(DiagnosticsManager.self) private var diagnosticsManager
 
     /// 当前查看的日志分类
     @State private var selectedCategory: LogCategory = .activity
@@ -38,9 +39,27 @@ struct LogsTab: View {
             Spacer()
 
             // 日志条数
-            Text(String(localized: "log.entryCount \(entries.count)"))
+            Text("^[\(entries.count) 条记录](inflect: true)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            // 导出诊断按钮
+            Button(action: { diagnosticsManager.exportDiagnostics() }) {
+                Label("导出诊断", systemImage: "square.and.arrow.up")
+                    .labelStyle(.iconOnly)
+            }
+            .buttonStyle(.plain)
+            .controlSize(.small)
+            .help("导出诊断报告")
+
+            // 崩溃日志按钮（本地查看，不自动上传）
+            Button(action: { diagnosticsManager.openCrashLogsDirectory() }) {
+                Label("崩溃日志", systemImage: "exclamationmark.triangle")
+                    .labelStyle(.iconOnly)
+            }
+            .buttonStyle(.plain)
+            .controlSize(.small)
+            .help("打开崩溃日志目录")
 
             // 清除按钮
             Button(action: { showClearConfirmation = true }) {

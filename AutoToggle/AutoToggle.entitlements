@@ -6,9 +6,10 @@
 	     这是 Hardened Runtime 下控制其他应用所必需的自动化授权。 -->
 	<key>com.apple.security.automation.apple-events</key>
 	<true/>
-	<!-- 允许加载 Sparkle.framework（第三方签名，Team ID 与本 app 不同）。
-	     Hardened Runtime 默认开启 Library Validation，会拒绝加载不同 Team 的框架；
-	     引入 Sparkle 自动更新必须关闭该校验，否则 dyld 启动即崩溃。 -->
+	<!-- 允许加载 Sparkle.framework。本 app 用自签名证书签名（无 Apple Team ID），
+	     Library Validation 无法匹配框架与主程序的 Team ID（dyld 报 "different Team IDs"），
+	     即使 Sparkle 已被 Xcode 用同一证书重签也会被拒绝。故必须关闭该校验，否则启动崩溃。
+	     改用真实 Developer ID + 公证后可移除此授权。 -->
 	<key>com.apple.security.cs.disable-library-validation</key>
 	<true/>
 </dict>

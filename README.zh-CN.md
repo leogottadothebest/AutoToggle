@@ -4,8 +4,8 @@
 
 [English](README.md) · [中文](README.zh-CN.md)
 
-[![Platform](https://img.shields.io/badge/platform-macOS%2026.0%2B-blue)](https://developer.apple.com/macos/)
-[![Architecture](https://img.shields.io/badge/arch-Apple%20Silicon%20only-orange)](#)
+[![Platform](https://img.shields.io/badge/platform-macOS%2014.0%2B-blue)](https://developer.apple.com/macos/)
+[![Architecture](https://img.shields.io/badge/arch-Universal%20(Intel%20%2B%20Apple%20Silicon)-orange)](#)
 [![Swift](https://img.shields.io/badge/swift-6.0-orange)](https://swift.org)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -23,19 +23,20 @@ AutoToggle 是一款轻量级 macOS 菜单栏应用，通过自定义规则**自
 - **🔍 智能应用选择器** — 完整扫描含实用工具在内的所有应用，按界面语言排序（中文按拼音、英文按字母），支持点击字母表快速导航
 - **⏰ 菜单栏显示定时任务** — 即将触发的定时启动/退出与被管理应用并列展示；已关闭的定时任务仍显示，可在右侧开关一键切换
 - **🔄 自动更新** — 内置 Sparkle 2 更新器：启动时自动检查，也可在「设置 → 关于 → 检查更新…」手动触发（可在设置中关闭自动检查）；新版自动下载安装
+- **⌨️ 全局快捷键** — 任意位置按 **⌥⌘P** 一键暂停/恢复所有规则（需辅助功能权限）
 
 ## 📥 安装
 
 ### 从 GitHub Release 下载
 
 > ⚖️ **版本选择**：本项目提供两条版本线——
-> - **1.2.0 及更早**：离线稳定版，完全不联网、无自动更新，最安全；
-> - **2.0.0 起**：内置 Sparkle 自动更新，会周期性联网检查新版本（可在设置中关闭自动检查）。
+> - **1.x（如 1.3.0）**：离线稳定版，完全不联网、无自动更新，最安全；
+> - **2.x（如 2.1.0）**：内置 Sparkle 自动更新，会周期性联网检查新版本（可在设置中关闭自动检查）。
 >
-> 需要彻底离线请选 1.2.0；需要自动更新请选 2.0.0 及更新版本。
+> 需要彻底离线请选 1.x；需要自动更新请选 2.x。
 
 1. 前往 [Releases](https://github.com/leogottadothebest/AutoToggle/releases) 页面
-2. 下载 `.dmg` 文件（如 `AutoToggle-2.0.0.dmg`）
+2. 下载 `.dmg` 文件（如 `AutoToggle-2.1.0.dmg`）
 3. 打开 DMG，将 AutoToggle 拖入「应用程序」文件夹
 4. 首次启动时，右键点击 AutoToggle.app →「打开」以绕过 Gatekeeper
 5. 根据引导授予「辅助功能」权限（可选，用于更精确的闲置检测），之后也可在「设置 → 权限」中查看或重新请求。
@@ -66,7 +67,7 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 
 > 首次构建会通过 Swift Package Manager 下载 Sparkle 更新框架（需联网一次）。
 
-**要求**: Xcode 26.0+, macOS 26.0+
+**要求**: Xcode 26.0+, macOS 14.0+
 
 ## 🎯 使用指南
 
@@ -93,6 +94,28 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 - **启用/禁用**: 在规则列表中直接切换开关
 - **编辑**: 双击规则行
 - **删除**: 在规则行上向左滑动 ∨ 进入编辑界面后点击删除
+
+## ❓ 常见问题 / 故障排查
+
+**「AutoToggle」无法打开，因为它无法被验证**
+
+AutoToggle 使用自签名证书（未经 Apple 公证）。首次启动时右键点击应用 → **打开**，或运行 `xattr -dr com.apple.quarantine /Applications/AutoToggle.app`。可用发布页的 `.sha256` 校验文件核对下载完整性。
+
+**辅助功能已授权，但应用仍显示「未授权」**
+
+macOS 对运行中的进程缓存授权状态。重启 AutoToggle 即可。若仍无效，运行 `tccutil reset Accessibility com.autotoggle.app`，再到系统设置重新授权并重启。
+
+**为什么我的应用被退出/隐藏了？**
+
+是闲置规则触发的。查看「设置 → 日志」里是否有「闲置退出/闲置隐藏」条目。正在播放音频、视频会议的应用受假闲置检测保护，不会被误关。
+
+**为什么我的应用退不掉？**
+
+AutoToggle 按三级策略退出（AppleScript → terminate → forceTerminate）。首次启动的「未保存更改」对话框可能阻塞优雅退出路径。查看日志可知走的是哪一级。
+
+**应用没有出现在选择器里？**
+
+选择器扫描 `/Applications`、`/Applications/Utilities`、`/System/Applications`，安装到其它位置的应用不会被索引。
 
 ## 🏗️ 技术架构
 
@@ -144,7 +167,9 @@ AutoToggle/
 
 ## 📄 许可
 
-MIT License © 2026 leogottadothebest
+MIT License © 2026 AutoToggle contributors
+
+[隐私政策](PRIVACY.md) · [贡献指南](CONTRIBUTING.md) · [行为准则](CODE_OF_CONDUCT.md)
 
 ---
 

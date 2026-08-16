@@ -30,6 +30,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         deps.idleDetectorManager.startMonitoring()
         deps.scheduleManager.startScheduling()
 
+        // 全局快捷键：⌥⌘P 切换暂停/恢复（需辅助功能权限）
+        deps.globalHotkeyManager.start { [weak deps] in
+            deps?.menuBarManager.togglePause()
+        }
+
         createAndShowMainWindow()
 
         // 菜单栏图标 + 非激活面板（不抢占其它应用的键盘焦点）
@@ -61,6 +66,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             .environment(deps.permissionManager)
             .environment(deps.sleepPreventionManager)
             .environment(deps.updateManager)
+            .environment(deps.diagnosticsManager)
 
         let hostingView = NSHostingView(rootView: contentView)
         // NSHostingView 默认高度很矮，给它合理的初始大小

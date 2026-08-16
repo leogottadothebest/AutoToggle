@@ -1,0 +1,3 @@
+# 钉版 Swift 工具链（mint bootstrap 安装；`mint run <tool>` 运行）
+realm/SwiftLint@0.57.1
+nicklockwood/SwiftFormat@0.54.6

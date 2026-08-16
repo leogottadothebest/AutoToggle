@@ -314,8 +314,20 @@ struct SettingsTab: View {
                 HStack {
                     Text("最低系统要求")
                     Spacer()
-                    Text("macOS 26.0 (Apple Silicon)")
+                    Text("macOS 14.0+ (Universal)")
                         .foregroundStyle(.secondary)
+                }
+
+                HStack {
+                    Text("隐私政策")
+                    Spacer()
+                    Button("查看") {
+                        if let url = URL(string: "https://github.com/leogottadothebest/AutoToggle/blob/main/PRIVACY.md") {
+                            NSWorkspace.shared.open(url)
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
                 }
             } header: {
                 Text("关于 AutoToggle")
@@ -398,7 +410,7 @@ struct SettingsTab: View {
                 try SMAppService.mainApp.unregister()
             }
         } catch {
-            print("[SettingsTab] 切换登录自启失败: \(error.localizedDescription)")
+            Log.general.error("切换登录自启失败: \(error.localizedDescription, privacy: .public)")
             launchAtLogin = SMAppService.mainApp.status == .enabled
         }
     }

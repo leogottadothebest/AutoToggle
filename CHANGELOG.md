@@ -4,6 +4,30 @@
 
 All notable changes to AutoToggle are documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [2.1.0] - 2026-08-16
+
+### Added
+
+- Lowered the minimum system requirement to macOS 14.0 and switched to a universal (Intel + Apple Silicon) build
+- Added CI (GitHub Actions: build, unit tests, lint, coverage), a shared Xcode scheme, and a Makefile with build/test/lint/format entry points
+- Added developer tooling: SwiftLint + SwiftFormat configs, `.editorconfig`, pinned toolchain (`Brewfile`/`Mintfile`/`.swift-version`)
+- Added community & governance files: `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue/PR templates, `THIRD_PARTY_LICENSES.md`, and a `PRIVACY.md` privacy policy
+- Added VoiceOver/keyboard accessibility labels for the menu bar and main window, and an in-app "Export Diagnostics…" action
+- Added a global hotkey (⌥⌘P) to pause/resume all rules, a local crash-log viewer, UI tests, performance baselines, and an SBOM
+- Completed the remaining English translations and added pluralization for rule/log counts
+
+### Changed
+
+- Unified developer logging on `os.Logger` and removed raw `print()` from release code
+- Stopped the always-on 3-second accessibility polling loop once permission is granted (energy saving)
+- Sparkle appcast now emits release notes, phased rollout, and a product link
+
+### Security
+
+- Added a versioned SwiftData schema scaffold and a first-run corrupt-store recovery path to protect against future model-change data loss
+
 ## [2.0.0] - 2026-08-16
 
 ### Added
@@ -68,3 +92,10 @@ First public release.
 
 - Enabled Hardened Runtime and minimized entitlements
 - Imported profile files gain size and field-range validation
+
+[Unreleased]: https://github.com/leogottadothebest/AutoToggle/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/leogottadothebest/AutoToggle/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/leogottadothebest/AutoToggle/compare/v1.2.0...v2.0.0
+[1.2.0]: https://github.com/leogottadothebest/AutoToggle/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/leogottadothebest/AutoToggle/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/leogottadothebest/AutoToggle/releases/tag/v1.0.0

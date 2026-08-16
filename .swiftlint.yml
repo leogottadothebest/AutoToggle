@@ -1,0 +1,23 @@
+# AutoToggle SwiftLint 配置
+# 保守起步：以默认规则为主，仅开启少数安全规则，避免现有代码因新规则而 CI 失败。
+# 后续可在本地 `mint run swiftlint` 逐步收紧。
+
+disabled_rules:
+  - line_length            # SwiftUI 声明式代码常超行宽
+  - trailing_comma         # 仓库既有风格混用
+  - type_body_length
+  - file_length
+  - function_body_length
+
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - explicit_init
+
+included:
+  - AutoToggle
+  - AutoToggleTests
+
+excluded:
+  - build
+  - .build

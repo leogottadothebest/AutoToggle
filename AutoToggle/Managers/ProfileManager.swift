@@ -130,6 +130,15 @@ final class ProfileManager {
     /// 导入文件大小上限（1MB）
     private static let maxImportBytes = 1_048_576
 
+    /// 清洗导入的显示名称：先剥离控制字符（C0/C1/DEL，含换行、制表、退格）再做长度截断，
+    /// 避免恶意输入用换行伪造日志行或污染 UI/导出报告（CWE-117）。与 renameProfile 的 trim 互补。
+    private static func sanitizeImportedText(_ raw: String, maxLength: Int) -> String {
+        let scalars = raw.unicodeScalars.filter { scalar in
+            scalar.value >= 0x20 && scalar.value != 0x7F && !(0x80...0x9F).contains(scalar.value)
+        }
+        return String(scalars.map { String($0) }.joined().prefix(maxLength))
+    }
+
     /// 从 JSON 文件导入配置方案
     func importProfile(from url: URL) -> Profile? {
         // 有界读取（≤1MB+1 哨兵）：既防超大文件内存耗尽（CWE-400），
@@ -155,7 +164,7 @@ final class ProfileManager {
         }
 
         // LOW-2 修复：名称长度截断，避免日志/UI 被超长或含控制字符的输入污染
-        let profileName = String(profileNameRaw.prefix(64))
+        let profileName = Self.sanitizeImportedText(profileNameRaw, maxLength: 64)
         let profile = createProfile(name: profileName, setActive: false)
 
         for ruleDict in rulesData.prefix(Self.maxImportedRules) {
@@ -167,7 +176,7 @@ final class ProfileManager {
                   let ruleType = RuleType(rawValue: ruleTypeRaw) else {
                 continue
             }
-            let appName = String(appNameRaw.prefix(128))
+            let appName = Self.sanitizeImportedText(appNameRaw, maxLength: 128)
             let isEnabled = ruleDict["isEnabled"] as? Bool ?? true
 
             var timeTrigger: TimeTrigger?
@@ -275,7 +284,7 @@ final class ProfileManager {
         do {
             try modelContext.save()
         } catch {
-            NSLog("[ProfileManager] 保存配置方案失败: %@", error.localizedDescription)
+            Log.persistence.error("保存配置方案失败: \(error.localizedDescription, privacy: .public)")
         }
     }
 }
