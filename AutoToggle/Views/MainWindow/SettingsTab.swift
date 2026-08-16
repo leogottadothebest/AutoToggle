@@ -31,6 +31,9 @@ struct SettingsTab: View {
     /// 权限管理器
     @Environment(PermissionManager.self) private var permissionManager
 
+    /// 自动更新管理器（Sparkle）
+    @Environment(UpdateManager.self) private var updateManager
+
     /// 日志保留 - 活动日志
     @AppStorage("activityLogRetentionDays") private var activityLogRetentionDays: Int = 30
     @AppStorage("activityMaxEntries") private var activityMaxEntries: Int = 500
@@ -294,9 +297,19 @@ struct SettingsTab: View {
                 HStack {
                     Text("版本")
                     Spacer()
+                    Button {
+                        updateManager.checkForUpdates()
+                    } label: {
+                        Text("检查更新…")
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+
                     Text(appVersion)
                         .foregroundStyle(.secondary)
                 }
+
+                Toggle("自动检查更新", isOn: autoCheckUpdatesBinding)
 
                 HStack {
                     Text("最低系统要求")
@@ -320,6 +333,14 @@ struct SettingsTab: View {
     /// 应用版本号（读取 Info.plist 的 CFBundleShortVersionString，避免与工程定义脱节）
     private var appVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.2.0"
+    }
+
+    /// 自动检查更新开关（读写 Sparkle 设置，持久化到 UserDefaults）
+    private var autoCheckUpdatesBinding: Binding<Bool> {
+        Binding(
+            get: { updateManager.automaticallyChecksForUpdates },
+            set: { updateManager.automaticallyChecksForUpdates = $0 }
+        )
     }
 
     // MARK: - 时区

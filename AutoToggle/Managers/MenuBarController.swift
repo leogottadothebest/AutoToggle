@@ -52,6 +52,7 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
             .environment(dependencies.appearanceManager)
             .environment(dependencies.permissionManager)
             .environment(dependencies.sleepPreventionManager)
+            .environment(dependencies.updateManager)
             .frame(width: 300)
             // 不叠加不透明背景：让 NSPopover 自身的材质（含顶部箭头）完整透出，
             // 避免箭头颜色与面板主体色不一致。外观由 NSApp.appearance + popover.appearance 驱动。

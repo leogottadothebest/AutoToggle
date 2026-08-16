@@ -19,6 +19,7 @@ final class AppDependencies {
     let idleDetectorManager: IdleDetectorManager
     let profileManager: ProfileManager
     let sleepPreventionManager: SleepPreventionManager
+    let updateManager = UpdateManager()
 
     init() {
         let container: ModelContainer

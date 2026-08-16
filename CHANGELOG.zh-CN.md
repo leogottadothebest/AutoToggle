@@ -4,7 +4,11 @@
 
 本文件记录 AutoToggle 每个版本的重要变更。格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循[语义化版本](https://semver.org/lang/zh-CN/)。
 
-## [Unreleased]
+## [2.0.0] - 2026-08-16
+
+### 新增
+
+- 内置 Sparkle 2 自动更新：启动时自动检查，也可在「设置 → 关于 → 检查更新…」手动触发；新版自动下载安装
 
 ## [1.2.0] - 2026-08-15
 

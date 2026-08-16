@@ -9,7 +9,7 @@
 [![Swift](https://img.shields.io/badge/swift-6.0-orange)](https://swift.org)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-AutoToggle is a lightweight macOS menu bar app that **automatically launches** and **automatically quits** your applications based on custom rules. It supports both time-based schedules and idle detection, and all data is stored locally — no network required.
+AutoToggle is a lightweight macOS menu bar app that **automatically launches** and **automatically quits** your applications based on custom rules. It supports both time-based schedules and idle detection, and all data is stored locally — the only network access is the built-in auto-update check.
 
 ## ✨ Features
 
@@ -18,10 +18,11 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 - **🛡️ Fake-idle detection** — intelligently recognizes audio playback, meetings, and similar scenarios to avoid false quits
 - **📋 Menu bar icon + main window** — the main window opens on launch to manage rules and logs; closing the window hides the app from the Dock (it keeps running in the menu bar), and the menu bar icon is an always-on quick entry
 - **🔌 Launch at login** — start automatically on sign-in, no manual steps
-- **🔒 Privacy-first** — all data is stored locally, with no network requests and no data upload
+- **🔒 Privacy-first** — all data is stored locally with no data upload; the only network access is a periodic HTTPS check for updates
 - **🇨🇳 Bilingual (Chinese / English)** — full Chinese UI plus a complete English translation, switchable in **Settings → Language** (a restart applies the change)
 - **🔍 Smart app picker** — scans every app including Utilities, sorts by UI language (pinyin for Chinese, A–Z for English), with a clickable letter index and auto-focused search
 - **⏰ Menu bar scheduled tasks** — upcoming scheduled launches/quits are shown right beside the managed apps; disabled tasks stay listed and can be toggled from the switch on the right
+- **🔄 Auto-update** — built-in Sparkle 2 updater: checks on launch and via **Settings → About → Check for Updates…** (automatic checks can be toggled off); new versions download and install automatically
 
 ## 📥 Installation
 
@@ -32,6 +33,8 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 3. Open the DMG and drag AutoToggle into the Applications folder
 4. On first launch, right-click AutoToggle.app → **Open** to bypass Gatekeeper
 5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection) — you can also manage it later in **Settings → Permissions**.
+
+Once installed, AutoToggle checks for updates automatically on launch; you can also trigger it manually in **Settings → About → Check for Updates…**.
 
 ### Build from source
 
@@ -54,6 +57,8 @@ xcodebuild -project AutoToggle.xcodeproj -scheme AutoToggle -configuration Relea
 
 # The app is in the DerivedData directory
 ```
+
+> The first build downloads the Sparkle updater framework via Swift Package Manager (network required once).
 
 **Requirements**: Xcode 26.0+, macOS 26.0+
 
@@ -103,6 +108,7 @@ AutoToggle/
 │   ├── PermissionManager       # permission checks
 │   ├── AppearanceManager       # appearance / theming
 │   ├── SleepPreventionManager  # sleep-prevention assertions during scheduled actions
+│   ├── UpdateManager           # Sparkle auto-update
 │   └── FocusedAppProvider / IdleDecisionEngine / SystemIdleProvider
 ├── Models/                     # SwiftData (AppRule / LogEntry / Profile / AppInfo / TimeTrigger)
 ├── Views/

@@ -2794,6 +2794,26 @@
         }
       }
     },
+    "检查更新…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check for Updates…"
+          }
+        }
+      }
+    },
+    "自动检查更新": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatically Check for Updates"
+          }
+        }
+      }
+    },
     "用于实时跟踪键盘焦点，提升应用闲置判断精度。核心闲置检测无需任何权限。": {
       "localizations": {
         "en": {

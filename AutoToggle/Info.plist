@@ -22,5 +22,11 @@
 	<string>Copyright © 2026 leogottadothebest. All rights reserved.</string>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>AutoToggle 需要发送 Apple Events 来自动退出和隐藏应用。</string>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/leogottadothebest/AutoToggle/main/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>QbgTrP26dS6+W/70YJlWTXWGBQfV8U65jUgfV3wfQOk=</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
 </dict>
 </plist>

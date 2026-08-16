@@ -60,6 +60,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             .environment(deps.appearanceManager)
             .environment(deps.permissionManager)
             .environment(deps.sleepPreventionManager)
+            .environment(deps.updateManager)
 
         let hostingView = NSHostingView(rootView: contentView)
         // NSHostingView 默认高度很矮，给它合理的初始大小

@@ -9,10 +9,15 @@ options:
 
 settings:
   base:
-    MARKETING_VERSION: "1.2.0"
-    CURRENT_PROJECT_VERSION: 3
+    MARKETING_VERSION: "2.0.0"
+    CURRENT_PROJECT_VERSION: 4
     SWIFT_VERSION: "6.0"
     INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 leogottadothebest. All rights reserved."
+
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    exactVersion: 2.9.5
 
 targets:
   AutoToggle:
@@ -42,7 +47,8 @@ targets:
           # ad-hoc 签名默认会注入 get-task-allow 调试授权（允许任意进程附加调试/注入代码）。
           # 发布构建必须关闭注入，仅保留我们声明的 apple-events 授权。
           CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
-    dependencies: []
+    dependencies:
+      - package: Sparkle
     preBuildScripts:
       - name: "SwiftLint"
         script: |
