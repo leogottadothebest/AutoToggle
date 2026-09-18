@@ -17,6 +17,7 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 - **💤 Idle detection** — auto-quit or hide apps after they have been idle for a set duration
 - **🛡️ Fake-idle detection** — intelligently recognizes audio playback, meetings, and similar scenarios to avoid false quits
 - **📋 Menu bar icon + main window** — the main window opens on launch to manage rules and logs; closing the window hides the app from the Dock (it keeps running in the menu bar), and the menu bar icon is an always-on quick entry
+- **🪟 Native menu bar panel** — on macOS 27+ the drop-down uses the system's native expanded interface (glass material, system keyboard navigation, Esc to dismiss); macOS 14–26 falls back to a popover. Either way the panel never steals keyboard focus from the apps you are using
 - **🔌 Launch at login** — start automatically on sign-in, no manual steps
 - **🔒 Privacy-first** — all data is stored locally, with no network requests and no data upload
 - **🇨🇳 Bilingual (Chinese / English)** — full Chinese UI plus a complete English translation, switchable in **Settings → Language** (a restart applies the change)
@@ -98,6 +99,9 @@ AutoToggle/
 │   ├── IdleDetectorManager     # idle detection + fake-idle detection
 │   ├── AppActionManager        # app launch/quit (three-tier graceful fallback)
 │   ├── MenuBarManager          # menu bar state management
+│   ├── MenuBarController       # status item + selects the panel backend by OS version
+│   ├── MenuBarPanelBackend     # panel backend protocol + NSPopover fallback (macOS 14–26)
+│   ├── ExpandedPanelBackend    # macOS 27+ native expanded-interface panel
 │   ├── LogManager              # logging + retention policy
 │   ├── ProfileManager          # rule import / export
 │   ├── PermissionManager       # permission checks
@@ -107,7 +111,7 @@ AutoToggle/
 ├── Models/                     # SwiftData (AppRule / LogEntry / Profile / AppInfo / TimeTrigger)
 ├── Views/
 │   ├── MainWindow/             # main window (Overview / App / Settings / Logs)
-│   ├── MenuBar/                # menu bar panel
+│   ├── MenuBar/                # menu bar panel content (MenuBarContentView / ManagedAppRow / PanelPositioning)
 │   ├── Settings/               # rule editing components
 │   └── Onboarding/             # permission onboarding
 ├── Utilities/                  # helpers (BundleHelper / AppIconProvider / AppSortHelper / LanguageManager)

@@ -38,7 +38,7 @@ elif [[ -f "$keychain_path" ]]; then
     print "  $legacy_password"
     keychain_password="$legacy_password"
   elif [[ -t 0 ]]; then
-    print -n "输入签名钥匙串口令（$keychain_path）："
+    print -n "输入签名钥匙串口令（${keychain_path}）："
     read -rs keychain_password
     print
   else

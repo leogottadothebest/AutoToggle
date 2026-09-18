@@ -23,7 +23,7 @@ if pgrep -x AutoToggle >/dev/null 2>&1; then
   sleep 1
 fi
 
-echo "▶ 直接覆盖 $DEST（先暂存到 .staging 再原子替换，不留旧版残留/版本号副本）"
+echo "▶ 直接覆盖 ${DEST}（先暂存到 .staging 再原子替换，不留旧版残留/版本号副本）"
 STAGING="$DEST.staging"
 rm -rf "$STAGING"
 ditto "$APP" "$STAGING"
