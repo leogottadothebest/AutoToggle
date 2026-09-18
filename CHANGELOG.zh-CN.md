@@ -6,6 +6,12 @@
 
 ## [Unreleased]
 
+## [2.2.2] - 2026-09-18
+
+### 移除
+
+- 内部清理，**无行为变化**：删除 `ScheduleManager.upcomingScheduledTriggers()` 与 `UpcomingScheduledTrigger` 模型——自 2.2.1 移除自建菜单栏面板后已无任何调用方。2.2.2 的行为与 2.2.1 完全一致
+
 ## [2.2.1] - 2026-09-18
 
 ### 变更

@@ -6,6 +6,12 @@ All notable changes to AutoToggle are documented in this file. The format is bas
 
 ## [Unreleased]
 
+## [2.2.2] - 2026-09-18
+
+### Removed
+
+- Internal cleanup with no behaviour change: removed `ScheduleManager.upcomingScheduledTriggers()` and the `UpcomingScheduledTrigger` model, which had no callers left after the custom menu bar panel was removed in 2.2.1. Version 2.2.2 behaves identically to 2.2.1
+
 ## [2.2.1] - 2026-09-18
 
 ### Changed

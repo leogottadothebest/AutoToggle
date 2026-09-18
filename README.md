@@ -31,13 +31,13 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 ### Download from GitHub Release
 
 > ⚖️ **Version choice** — this project ships two release lines:
-> - **1.x (e.g. 1.4.1)**: offline stable builds — no network access, no auto-update, the most secure option;
-> - **2.x (e.g. 2.2.1)**: built-in Sparkle auto-update that periodically checks for new versions over the network (auto-check can be disabled in Settings).
+> - **1.x (e.g. 1.4.2)**: offline stable builds — no network access, no auto-update, the most secure option;
+> - **2.x (e.g. 2.2.2)**: built-in Sparkle auto-update that periodically checks for new versions over the network (auto-check can be disabled in Settings).
 >
 > Choose 1.x for a fully offline environment, or 2.x for automatic updates.
 
 1. Go to the [Releases](https://github.com/leogottadothebest/AutoToggle/releases) page
-2. Download a `.dmg` file (e.g. `AutoToggle-2.2.1.dmg`)
+2. Download a `.dmg` file (e.g. `AutoToggle-2.2.2.dmg`)
 3. Open the DMG and drag AutoToggle into the Applications folder
 4. On first launch, right-click AutoToggle.app → **Open** to bypass Gatekeeper
 5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection) — you can also manage it later in **Settings → Permissions**.
