@@ -29,7 +29,7 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 ### Download from GitHub Release
 
 1. Go to the [Releases](https://github.com/leogottadothebest/AutoToggle/releases) page
-2. Download the latest `.dmg` file (e.g. `AutoToggle-1.4.1.dmg`)
+2. Download the latest `.dmg` file (e.g. `AutoToggle-1.4.2.dmg`)
 3. Open the DMG and drag AutoToggle into the Applications folder
 4. On first launch, right-click AutoToggle.app → **Open** to bypass Gatekeeper
 5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection) — you can also manage it later in **Settings → Permissions**.
@@ -145,8 +145,8 @@ An idle rule fired: the app was idle longer than its configured threshold, so it
 **Why won't a target app quit?**
 The three-tier fallback (AppleScript → terminate → forceTerminate) can fail if the target app is showing a modal like "Save changes?", or if AutoToggle lacks Automation permission. Dismiss the dialog, and confirm AutoToggle is allowed to control the app under System Settings → Privacy & Security → Automation.
 
-**I'm on 1.2.0 — how do I upgrade to 1.4.1?**
-The 1.x offline line has no auto-update. Download `AutoToggle-1.4.1.dmg` from the Releases page and reinstall manually.
+**I'm on 1.2.0 — how do I upgrade to 1.4.2?**
+The 1.x offline line has no auto-update. Download `AutoToggle-1.4.2.dmg` from the Releases page and reinstall manually.
 
 ## 📄 License
 
