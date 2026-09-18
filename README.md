@@ -17,19 +17,19 @@ AutoToggle is a lightweight macOS menu bar app that **automatically launches** a
 - **💤 Idle detection** — auto-quit or hide apps after they have been idle for a set duration
 - **🛡️ Fake-idle detection** — intelligently recognizes audio playback, meetings, and similar scenarios to avoid false quits
 - **📋 Menu bar icon + main window** — the main window opens on launch to manage rules and logs; closing the window hides the app from the Dock (it keeps running in the menu bar), and the menu bar icon is an always-on quick entry
-- **🪟 Native menu bar panel** — on macOS 27+ the drop-down uses the system's native expanded interface (glass material, system keyboard navigation, Esc to dismiss); macOS 14–26 falls back to a popover. Either way the panel never steals keyboard focus from the apps you are using
+- **🪟 Standard menu bar menu** — the status item opens a real system menu (`MenuBarExtra`) with quick actions: main window, pause rules, prevent system sleep, quit. Rule editing, logs and settings all live in the main window
 - **🔌 Launch at login** — start automatically on sign-in, no manual steps
 - **🔒 Privacy-first** — all data is stored locally, with no network requests and no data upload
 - **🇨🇳 Bilingual (Chinese / English)** — full Chinese UI plus a complete English translation, switchable in **Settings → Language** (a restart applies the change)
 - **🔍 Smart app picker** — scans every app including Utilities, sorts by UI language (pinyin for Chinese, A–Z for English), with a clickable letter index and auto-focused search
-- **⏰ Menu bar scheduled tasks** — upcoming scheduled launches/quits are shown right beside the managed apps; disabled tasks stay listed and can be toggled from the switch on the right
+- **⏰ Next-trigger overview** — the Overview tab shows when the next scheduled launch/quit will fire
 
 ## 📥 Installation
 
 ### Download from GitHub Release
 
 1. Go to the [Releases](https://github.com/leogottadothebest/AutoToggle/releases) page
-2. Download the latest `.dmg` file (e.g. `AutoToggle-1.3.0.dmg`)
+2. Download the latest `.dmg` file (e.g. `AutoToggle-1.4.1.dmg`)
 3. Open the DMG and drag AutoToggle into the Applications folder
 4. On first launch, right-click AutoToggle.app → **Open** to bypass Gatekeeper
 5. Follow the prompts to grant **Accessibility** permission (optional, for more precise idle detection) — you can also manage it later in **Settings → Permissions**.
@@ -88,7 +88,7 @@ scripts/build.sh
 
 ```
 AutoToggle/
-├── AutoToggleApp.swift         # @main entry (empty App scene; window + menu bar created in AppKit)
+├── AutoToggleApp.swift         # @main entry (MenuBarExtra scene; the main window is created in AppKit)
 ├── AppDelegate.swift           # native NSWindow + NSHostingView main window
 ├── AppDependencies.swift       # @MainActor centralized dependency injection
 ├── Info.plist / AutoToggle.entitlements
@@ -99,9 +99,6 @@ AutoToggle/
 │   ├── IdleDetectorManager     # idle detection + fake-idle detection
 │   ├── AppActionManager        # app launch/quit (three-tier graceful fallback)
 │   ├── MenuBarManager          # menu bar state management
-│   ├── MenuBarController       # status item + selects the panel backend by OS version
-│   ├── MenuBarPanelBackend     # panel backend protocol + NSPopover fallback (macOS 14–26)
-│   ├── ExpandedPanelBackend    # macOS 27+ native expanded-interface panel
 │   ├── LogManager              # logging + retention policy
 │   ├── ProfileManager          # rule import / export
 │   ├── PermissionManager       # permission checks
@@ -111,7 +108,7 @@ AutoToggle/
 ├── Models/                     # SwiftData (AppRule / LogEntry / Profile / AppInfo / TimeTrigger)
 ├── Views/
 │   ├── MainWindow/             # main window (Overview / App / Settings / Logs)
-│   ├── MenuBar/                # menu bar panel content (MenuBarContentView / ManagedAppRow / PanelPositioning)
+│   ├── MenuBar/                # menu bar menu content (StatusMenuView)
 │   ├── Settings/               # rule editing components
 │   └── Onboarding/             # permission onboarding
 ├── Utilities/                  # helpers (BundleHelper / AppIconProvider / AppSortHelper / LanguageManager)
@@ -148,8 +145,8 @@ An idle rule fired: the app was idle longer than its configured threshold, so it
 **Why won't a target app quit?**
 The three-tier fallback (AppleScript → terminate → forceTerminate) can fail if the target app is showing a modal like "Save changes?", or if AutoToggle lacks Automation permission. Dismiss the dialog, and confirm AutoToggle is allowed to control the app under System Settings → Privacy & Security → Automation.
 
-**I'm on 1.2.0 — how do I upgrade to 1.3.0?**
-The 1.x offline line has no auto-update. Download `AutoToggle-1.3.0.dmg` from the Releases page and reinstall manually.
+**I'm on 1.2.0 — how do I upgrade to 1.4.1?**
+The 1.x offline line has no auto-update. Download `AutoToggle-1.4.1.dmg` from the Releases page and reinstall manually.
 
 ## 📄 License
 

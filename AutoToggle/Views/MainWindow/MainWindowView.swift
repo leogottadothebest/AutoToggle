@@ -22,6 +22,13 @@ struct MainWindowView: View {
     /// 触发编辑器保存
     @State private var saveRequested = false
 
+    // MARK: - 首次运行权限引导
+
+    /// 是否已展示过首次使用引导（原挂在菜单栏面板上，改用菜单后移到这里）
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    /// 首次启动时显示权限引导
+    @State private var showPermissionGuide = false
+
     enum MainTab: String, CaseIterable {
         case overview
         case apps
@@ -68,6 +75,17 @@ struct MainWindowView: View {
             }
         } message: {
             Text("当前编辑的规则尚未保存，是否保存更改？")
+        }
+        .sheet(isPresented: $showPermissionGuide) {
+            PermissionGrantView {
+                hasCompletedOnboarding = true
+                showPermissionGuide = false
+            }
+        }
+        .onAppear {
+            if !hasCompletedOnboarding {
+                showPermissionGuide = true
+            }
         }
     }
 

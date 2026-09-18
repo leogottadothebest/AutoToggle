@@ -17,19 +17,19 @@ AutoToggle 是一款轻量级 macOS 菜单栏应用，通过自定义规则**自
 - **💤 闲置检测** — 应用闲置指定分钟后自动退出或隐藏
 - **🛡️ 假闲置检测** — 智能识别音频播放、会议等场景，避免误关
 - **📋 菜单栏图标 + 主窗口** — 主窗口启动即打开，集中管理规则与日志；关闭窗口后应用从 Dock 消失（继续驻留菜单栏），菜单栏图标作为常驻快速入口
-- **🪟 原生菜单栏面板** — macOS 27+ 的下拉面板使用系统原生 expanded interface（玻璃材质、系统键盘导航、Esc 关闭）；macOS 14–26 回退到 popover。两种方式都不会抢占其它应用的键盘焦点
+- **🪟 标准菜单栏菜单** — 状态项展开的是系统标准菜单（`MenuBarExtra`），只放快捷操作：主界面、暂停规则、防系统休眠、退出。规则编辑、日志与设置都在主窗口
 - **🔌 开机自启** — 登录时自动启动，无需手动操作
 - **🔒 隐私优先** — 所有数据存储在本地，无网络请求，无数据上传
 - **🇨🇳 中英双语** — 完整中文界面 + 全量英文翻译，可在「设置 → 语言」切换（重启应用后生效）
 - **🔍 智能应用选择器** — 完整扫描含实用工具在内的所有应用，按界面语言排序（中文按拼音、英文按字母），支持点击字母表快速导航
-- **⏰ 菜单栏显示定时任务** — 即将触发的定时启动/退出与被管理应用并列展示；已关闭的定时任务仍显示，可在右侧开关一键切换
+- **⏰ 下次触发总览** — 总览页显示下一个定时启动/退出将在何时触发
 
 ## 📥 安装
 
 ### 从 GitHub Release 下载
 
 1. 前往 [Releases](https://github.com/leogottadothebest/AutoToggle/releases) 页面
-2. 下载最新的 `.dmg` 文件（如 `AutoToggle-1.3.0.dmg`）
+2. 下载最新的 `.dmg` 文件（如 `AutoToggle-1.4.1.dmg`）
 3. 打开 DMG，将 AutoToggle 拖入「应用程序」文件夹
 4. 首次启动时，右键点击 AutoToggle.app →「打开」以绕过 Gatekeeper
 5. 根据引导授予「辅助功能」权限（可选，用于更精确的闲置检测），之后也可在「设置 → 权限」中查看或重新请求。
@@ -88,7 +88,7 @@ scripts/build.sh
 
 ```
 AutoToggle/
-├── AutoToggleApp.swift         # @main 入口（空 App 场景；窗口与菜单栏均由 AppKit 创建）
+├── AutoToggleApp.swift         # @main 入口（MenuBarExtra 场景；主窗口由 AppKit 创建）
 ├── AppDelegate.swift           # 原生 NSWindow + NSHostingView 主窗口
 ├── AppDependencies.swift       # @MainActor 集中依赖注入
 ├── Info.plist / AutoToggle.entitlements
@@ -99,9 +99,6 @@ AutoToggle/
 │   ├── IdleDetectorManager     # 闲置检测 + 假闲置判断
 │   ├── AppActionManager        # 应用启停（三级优雅降级）
 │   ├── MenuBarManager          # 菜单栏状态管理
-│   ├── MenuBarController       # 状态项 + 按系统版本选择面板后端
-│   ├── MenuBarPanelBackend     # 面板后端协议 + NSPopover 回退（macOS 14–26）
-│   ├── ExpandedPanelBackend    # macOS 27+ 原生 expanded interface 面板
 │   ├── LogManager              # 日志 + 保留策略
 │   ├── ProfileManager          # 规则导入/导出
 │   ├── PermissionManager       # 权限检查
@@ -111,7 +108,7 @@ AutoToggle/
 ├── Models/                     # SwiftData（AppRule / LogEntry / Profile / AppInfo / TimeTrigger）
 ├── Views/
 │   ├── MainWindow/             # 主窗口（Overview / App / Settings / Logs）
-│   ├── MenuBar/                # 菜单栏面板内容（MenuBarContentView / ManagedAppRow / PanelPositioning）
+│   ├── MenuBar/                # 菜单栏菜单内容（StatusMenuView）
 │   ├── Settings/               # 规则编辑组件
 │   └── Onboarding/             # 权限引导
 ├── Utilities/                  # 工具类（BundleHelper / AppIconProvider / AppSortHelper / LanguageManager）
@@ -148,8 +145,8 @@ macOS 会缓存运行中进程的授权状态。授予后**重启 AutoToggle** �
 **为什么目标应用退不掉？**
 三级退出回退（AppleScript → terminate → forceTerminate）若全部失败，通常是目标应用弹出了「是否保存更改？」这类模态框，或未授予「自动化」权限。先手动关掉模态框，并在「系统设置 → 隐私与安全性 → 自动化」确认 AutoToggle 有权控制该应用。
 
-**我是 1.2.0 用户，如何升级到 1.3.0？**
-1.x 离线线无自动更新，请到 Releases 页手动下载 `AutoToggle-1.3.0.dmg` 重新安装。
+**我是 1.2.0 用户，如何升级到 1.4.1？**
+1.x 离线线无自动更新，请到 Releases 页手动下载 `AutoToggle-1.4.1.dmg` 重新安装。
 
 ## 📄 许可
 

@@ -11,9 +11,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     /// 主窗口引用
     private var mainWindow: NSWindow?
 
-    /// 菜单栏图标 + 面板控制器
-    private var menuBarController: MenuBarController?
-
     // MARK: - 应用生命周期
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -31,11 +28,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         deps.scheduleManager.startScheduling()
 
         createAndShowMainWindow()
-
-        // 菜单栏图标 + 非激活面板（不抢占其它应用的键盘焦点）
-        menuBarController = MenuBarController(dependencies: deps) { [weak self] in
-            self?.showMainWindow()
-        }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -88,9 +80,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     /// 显示已存在的主窗口（置前并获得焦点）
     func showMainWindow() {
-        // 先收起菜单栏面板，避免其盖在主窗口之上
-        menuBarController?.closePanel()
-
         // 若之前关闭窗口已转入菜单栏模式（Dock 隐藏），恢复 Dock 图标
         NSApp.setActivationPolicy(.regular)
 
