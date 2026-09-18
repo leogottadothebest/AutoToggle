@@ -3,6 +3,20 @@
     <channel>
         <title>AutoToggle</title>
         <item>
+            <title>2.2.0</title>
+            <pubDate>Fri, 18 Sep 2026 13:23:52 +0800</pubDate>
+            <link>https://github.com/leogottadothebest/AutoToggle</link>
+            <sparkle:phasedRolloutInterval>86400</sparkle:phasedRolloutInterval>
+            <sparkle:version>8</sparkle:version>
+            <sparkle:shortVersionString>2.2.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.2.0/AutoToggle-2.2.0.dmg" length="4362038" type="application/octet-stream" sparkle:edSignature="D9X47qv0kqat1sNsr39ewl8YKrNCxuxMSDjzePK52YJDplTWDCWKb4b5vbkoJOaxQamIhn1UzqeBvwNRLfZABw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.2.0/AutoToggle8-7.delta" sparkle:deltaFrom="7" length="740402" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977712" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TDKvaSnV3ym16TMHpEIpWtvNbppoQnqeXALyg1Tq8X9SU3msZT4dcydogtghw/fzKNqVyOnuq18omQG/9qtsBQ=="/>
+                <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.2.0/AutoToggle8-4.delta" sparkle:deltaFrom="4" length="880958" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977712" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Ic7C995Q7BDuwQRm9r1gpy/nH416W9+3/Nr0ZsgbYDZuhm/0uvV9Y7AgoJ169JvFZJ79Das01ETZr2SYATrXBg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.1.0</title>
             <pubDate>Sun, 16 Aug 2026 23:22:54 +0800</pubDate>
             <link>https://github.com/leogottadothebest/AutoToggle</link>
@@ -10,7 +24,7 @@
             <sparkle:version>7</sparkle:version>
             <sparkle:shortVersionString>2.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.1.0/AutoToggle-2.1.0.dmg" length="4291156" type="application/octet-stream" sparkle:edSignature="pJr1bnnt3NdkbFNZO6vvnDp7IjyXBkHYVxgx7hme5zQoN0o1PHe0IKy2DmZmyNpNKgEqMpycROn/lwBLrIL0Dw=="/>
+            <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.2.0/AutoToggle-2.1.0.dmg" length="4291156" type="application/octet-stream" sparkle:edSignature="pJr1bnnt3NdkbFNZO6vvnDp7IjyXBkHYVxgx7hme5zQoN0o1PHe0IKy2DmZmyNpNKgEqMpycROn/lwBLrIL0Dw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.1.0/AutoToggle7-4.delta" sparkle:deltaFrom="4" length="684018" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="977712" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zbunT5c2hYC735/IPvvOKAAiCZza5JT9Q5z3xwl/xTVvDGzvz3Z9d78KHJXs25S71ODUCBaIM8Z84D++BRGDBQ=="/>
             </sparkle:deltas>
@@ -21,7 +35,7 @@
             <sparkle:version>4</sparkle:version>
             <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.1.0/AutoToggle-2.0.0.dmg" length="3248718" type="application/octet-stream" sparkle:edSignature="nabmGJs3uXtDJH8Tz2qoZW3GvsZE9/Km85eSx2ZXZklt0rFSrbAdhzwU1wemM20oqmOWMHcNa9qkmioInbPWAQ=="/>
+            <enclosure url="https://github.com/leogottadothebest/AutoToggle/releases/download/v2.2.0/AutoToggle-2.0.0.dmg" length="3248718" type="application/octet-stream" sparkle:edSignature="nabmGJs3uXtDJH8Tz2qoZW3GvsZE9/Km85eSx2ZXZklt0rFSrbAdhzwU1wemM20oqmOWMHcNa9qkmioInbPWAQ=="/>
         </item>
     </channel>
 </rss>
