@@ -17,6 +17,7 @@ AutoToggle 是一款轻量级 macOS 菜单栏应用，通过自定义规则**自
 - **💤 闲置检测** — 应用闲置指定分钟后自动退出或隐藏
 - **🛡️ 假闲置检测** — 智能识别音频播放、会议等场景，避免误关
 - **📋 菜单栏图标 + 主窗口** — 主窗口启动即打开，集中管理规则与日志；关闭窗口后应用从 Dock 消失（继续驻留菜单栏），菜单栏图标作为常驻快速入口
+- **🪟 原生菜单栏面板** — macOS 27+ 的下拉面板使用系统原生 expanded interface（玻璃材质、系统键盘导航、Esc 关闭）；macOS 14–26 回退到 popover。两种方式都不会抢占其它应用的键盘焦点
 - **🔌 开机自启** — 登录时自动启动，无需手动操作
 - **🔒 隐私优先** — 所有数据存储在本地，无数据上传；唯一的联网行为是周期性的 HTTPS 更新检查
 - **🇨🇳 中英双语** — 完整中文界面 + 全量英文翻译，可在「设置 → 语言」切换（重启应用后生效）
@@ -121,7 +122,7 @@ AutoToggle 按三级策略退出（AppleScript → terminate → forceTerminate�
 
 ```
 AutoToggle/
-├── AutoToggleApp.swift         # @main 入口（App 场景 + MenuBarExtra）
+├── AutoToggleApp.swift         # @main 入口（无 SwiftUI 场景，窗口与状态项均由 AppKit 创建）
 ├── AppDelegate.swift           # 原生 NSWindow + NSHostingView 主窗口
 ├── AppDependencies.swift       # @MainActor 集中依赖注入
 ├── Info.plist / AutoToggle.entitlements
@@ -132,6 +133,9 @@ AutoToggle/
 │   ├── IdleDetectorManager     # 闲置检测 + 假闲置判断
 │   ├── AppActionManager        # 应用启停（三级优雅降级）
 │   ├── MenuBarManager          # 菜单栏状态管理
+│   ├── MenuBarController       # 状态项 + 按系统版本选择面板后端
+│   ├── MenuBarPanelBackend     # 面板后端协议 + NSPopover 回退（macOS 14–26）
+│   ├── ExpandedPanelBackend    # macOS 27+ 原生 expanded interface 面板
 │   ├── LogManager              # 日志 + 保留策略
 │   ├── ProfileManager          # 规则导入/导出
 │   ├── PermissionManager       # 权限检查
@@ -142,7 +146,7 @@ AutoToggle/
 ├── Models/                     # SwiftData（AppRule / LogEntry / Profile / AppInfo / TimeTrigger）
 ├── Views/
 │   ├── MainWindow/             # 主窗口（Overview / App / Settings / Logs）
-│   ├── MenuBar/                # 菜单栏面板
+│   ├── MenuBar/                # 菜单栏面板内容（MenuBarContentView / ManagedAppRow / PanelPositioning）
 │   ├── Settings/               # 规则编辑组件
 │   └── Onboarding/             # 权限引导
 ├── Utilities/                  # 工具类（BundleHelper / AppIconProvider / AppSortHelper / LanguageManager）

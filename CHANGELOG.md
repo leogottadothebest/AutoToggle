@@ -6,6 +6,16 @@ All notable changes to AutoToggle are documented in this file. The format is bas
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-09-18
+
+### Added
+
+- The menu bar drop-down now uses the system's native expanded-interface panel on macOS 27 and later: glass material, system keyboard navigation, and Esc to dismiss. macOS 14–26 keeps the popover. Neither variant steals keyboard focus from the apps you are using
+
+### Fixed
+
+- Build scripts failed under `bash` 3.2 in UTF-8 locales: a variable immediately followed by a full-width character was parsed as part of the variable name. All such interpolations are now brace-delimited (`${VAR}`)
+
 ## [2.1.0] - 2026-08-16
 
 ### Added

@@ -14,7 +14,7 @@ IDENTITY="AutoToggle Development"
 if [[ -f "$KEYCHAIN" ]]; then
   if ! security show-keychain-info "$KEYCHAIN" >/dev/null 2>&1; then
     if ! security unlock-keychain "$KEYCHAIN"; then
-      echo "❌ 无法解锁签名钥匙串 $KEYCHAIN（交互解锁失败/被取消，或非交互环境下已锁定）。" >&2
+      echo "❌ 无法解锁签名钥匙串 ${KEYCHAIN}（交互解锁失败/被取消，或非交互环境下已锁定）。" >&2
       echo "   请在有终端的目录手动运行 scripts/build.sh 并输入口令解锁。" >&2
       exit 1
     fi
@@ -22,7 +22,7 @@ if [[ -f "$KEYCHAIN" ]]; then
 fi
 
 if ! security find-identity -v -p codesigning 2>/dev/null | grep -Fq "\"$IDENTITY\""; then
-  echo "❌ 找不到签名身份「$IDENTITY」。请先运行 scripts/bootstrap-signing.sh" >&2
+  echo "❌ 找不到签名身份「${IDENTITY}」。请先运行 scripts/bootstrap-signing.sh" >&2
   exit 1
 fi
 
@@ -33,7 +33,8 @@ else
   echo "ℹ 未安装 xcodegen，沿用现有 AutoToggle.xcodeproj"
 fi
 
-echo "▶ 构建 Release（签名身份: $IDENTITY）"
+# 形如 ${VAR} 的花括号不能省：紧跟全角字符时，bash 3.2 在 UTF-8 locale 下会把该字符并进变量名
+echo "▶ 构建 Release（签名身份: ${IDENTITY}）"
 # -destination 'generic/platform=macOS' 强制构建全部 ARCHS（arm64 + x86_64 通用二进制）。
 # 不带 destination 时 xcodebuild 默认以当前机器架构为目标（等效 ONLY_ACTIVE_ARCH=YES），只产 arm64。
 xcodebuild -project AutoToggle.xcodeproj \
