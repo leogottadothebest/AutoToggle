@@ -6,6 +6,17 @@ All notable changes to AutoToggle are documented in this file. The format is bas
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-09-18
+
+### Changed
+
+- The menu bar drop-down is now a real system menu (`MenuBarExtra` in `.menu` style) instead of a custom panel. The system's "click the wallpaper to show the desktop" gesture pushed the custom panel aside; a real `NSMenu` receives that click while menu tracking is active, so the menu stays open. Esc, keyboard navigation, highlight and expand animation are now the system's. The menu carries quick actions only (Main Window / Pause All Rules / Keep Awake / Quit) — rule editing, logs and settings stay in the main window
+- The menu bar icon now renders at 30pt, the asset's native size (it had been scaled down to 24pt)
+
+### Removed
+
+- Removed the custom menu bar panel: the `NSPopover` panel, the macOS 27 expanded-interface backend, panel positioning helpers, the managed-app row view, and their unit tests
+
 ## [2.2.0] - 2026-09-18
 
 ### Added

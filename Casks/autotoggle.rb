@@ -1,7 +1,7 @@
 cask "autotoggle" do
-  version "2.1.0"
-  # ⚠️ 发布 DMG 后用 `shasum -a 256 AutoToggle-2.1.0.dmg` 填入真实哈希
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  version "2.2.1"
+  # 发布 DMG 后用 `shasum -a 256 AutoToggle-2.2.1.dmg` 填入真实哈希
+  sha256 "b1953c21d44f5b0b04cb318cc7bf8f4f07fc5adc765269d79934e6820b8a09c1"
 
   url "https://github.com/leogottadothebest/AutoToggle/releases/download/v#{version}/AutoToggle-#{version}.dmg"
   name "AutoToggle"

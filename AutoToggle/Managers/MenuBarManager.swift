@@ -11,9 +11,6 @@ final class MenuBarManager {
     /// 当前是否处于暂停状态（所有规则暂停执行）
     var isPaused: Bool = false
 
-    /// 活跃规则数量
-    var activeRuleCount: Int = 0
-
     /// 注入的 UserDefaults（测试传 suiteName 隔离）
     private let defaults: UserDefaults
 
@@ -27,11 +24,6 @@ final class MenuBarManager {
     func togglePause() {
         isPaused.toggle()
         defaults.set(isPaused, forKey: "isPaused")
-    }
-
-    /// 更新菜单栏统计数据
-    func updateStats(activeRules: Int) {
-        activeRuleCount = activeRules
     }
 
     /// 退出 AutoToggle
